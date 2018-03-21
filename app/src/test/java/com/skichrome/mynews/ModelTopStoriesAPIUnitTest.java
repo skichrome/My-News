@@ -11,7 +11,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * This test class assert that all fields required for the app are available
+ * This test class assert that all fields required in the app are available for the top stories API
  */
 
 public class ModelTopStoriesAPIUnitTest
