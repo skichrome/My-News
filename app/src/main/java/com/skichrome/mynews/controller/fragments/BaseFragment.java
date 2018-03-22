@@ -24,16 +24,18 @@ public abstract class BaseFragment extends Fragment
     // Bind views with butterKnife
     //===============================
 
+    /*
     @BindView(R.id.list_item_recycler_view_image) ImageView mImageViewRecyclerView;
     @BindView(R.id.list_item_recycler_view_title) android.widget.TextView mTextViewTitleRecyclerView;
     @BindView(R.id.list_item_recycler_view_date) TextView mTextViewDateRecyclerView;
-    @BindView(R.id.list_item_recycler_view_start_article_light) TextView mTextViewStartArticleRecyclerView;
+    @BindView(R.id.list_item_recycler_view_start_article_light) TextView mTextViewStartArticleRecyclerView;*/
+
+    @BindView(R.id.test_for_fragment) TextView mTextViewTest;
 
     //=========================
     // Base Abstract Methods
     //=========================
 
-    protected abstract BaseFragment newInstance();
     protected abstract void configureDesign();
     protected abstract void updateDesign();
 
@@ -64,7 +66,7 @@ public abstract class BaseFragment extends Fragment
     public void onActivityCreated (@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        Icepick.restoreInstanceState(this, savedInstanceState);
+        //Icepick.restoreInstanceState(this, savedInstanceState);
 
         this.updateDesign();
     }
@@ -73,7 +75,7 @@ public abstract class BaseFragment extends Fragment
     public void onSaveInstanceState (Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        Icepick.saveInstanceState(this, outState);
+        //Icepick.saveInstanceState(this, outState);
     }
 
     protected int getFragmentLayout ()

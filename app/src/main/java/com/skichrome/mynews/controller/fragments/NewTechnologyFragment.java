@@ -11,8 +11,7 @@ public class NewTechnologyFragment extends BaseFragment
     // Base Methods
     //=====================
 
-    @Override
-    protected BaseFragment newInstance ()
+    public static BaseFragment newInstance ()
     {
         return new NewTechnologyFragment();
     }
@@ -25,5 +24,6 @@ public class NewTechnologyFragment extends BaseFragment
     @Override
     protected void updateDesign ()
     {
+        mTextViewTest.setText("It's a test, you're in New Tech Fragment !");
     }
 }

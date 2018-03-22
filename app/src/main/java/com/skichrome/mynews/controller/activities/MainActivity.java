@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
 import com.skichrome.mynews.R;
+import com.skichrome.mynews.view.PageAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,5 +66,12 @@ public class MainActivity extends AppCompatActivity
 
     private void configureViewPagerAndTabs ()
     {
+        mViewPager.setAdapter(new PageAdapter(getSupportFragmentManager())
+        {
+        });
+
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
 }

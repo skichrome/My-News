@@ -11,8 +11,7 @@ public class TopStoriesFragment extends BaseFragment
     // Base Methods
     //=====================
 
-    @Override
-    protected BaseFragment newInstance ()
+    public static BaseFragment newInstance ()
     {
         return new TopStoriesFragment();
     }
@@ -25,5 +24,6 @@ public class TopStoriesFragment extends BaseFragment
     @Override
     protected void updateDesign ()
     {
+        mTextViewTest.setText("It's a test, you're in Top Stories Fragment !");
     }
 }
