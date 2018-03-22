@@ -23,7 +23,7 @@ android:
     # if you need to run emulator(s) during your tests
     - sys-img-armeabi-v7a-$ANDROID_TARGET
 
-jdk: oraclejdk7
+jdk: oraclejdk8
 
 before_install:
   - yes | sdkmanager "platforms;android-26"
