@@ -16,14 +16,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ModelTopStoriesAPIUnitTest
 {
-    private List<Result> mResultsList;
-    private List<Multimedium> mMultimedium;
+    private MainNewYorkTimesTopStories mMainNewYorkTimesTopStories;
 
     @Before
-    public void setVariables()
+    public void setTopStoriesFields()
     {
-        mResultsList = new ArrayList<>();
-        mMultimedium = new ArrayList<>();
+        List<Result> mResultsList = new ArrayList<>();
+        List<Multimedium> mMultimedium = new ArrayList<>();
+        mMainNewYorkTimesTopStories = new MainNewYorkTimesTopStories();
 
         //set a test result array, with test defined fields
         Result mTempResult = new Result();
@@ -45,14 +45,13 @@ public class ModelTopStoriesAPIUnitTest
         //add two items to the list
         mResultsList.add(mTempResult);
         mResultsList.add(mTempResult);
+
+        mMainNewYorkTimesTopStories.setResults(mResultsList);
     }
 
     @Test
     public void shouldTheTopStoriesAPIModelReturnAllNeededValues()
     {
-        MainNewYorkTimesTopStories mMainNewYorkTimesTopStories = new MainNewYorkTimesTopStories();
-        mMainNewYorkTimesTopStories.setResults(mResultsList);
-
         for (Result mResult : mMainNewYorkTimesTopStories.getResults())
         {
             assertThat("all variables must be present in the model fields", mResult.getUrl() != null);
