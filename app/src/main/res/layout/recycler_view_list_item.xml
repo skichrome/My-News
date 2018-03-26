@@ -5,19 +5,19 @@
 
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/list_item_recycler_view_image"
         android:layout_width="70dp"
         android:layout_height="70dp"
+        android:layout_margin="10dp"
         android:layout_gravity="center"
         android:contentDescription="@string/description_image_recycler_view"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
@@ -27,34 +27,39 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/list_item_recycler_view_title"
+                android:id="@+id/list_item_recycler_view_section_id"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="2"
                 android:gravity="start"
+                android:layout_marginTop="10dp"
+                android:text="section title here"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
                 android:textStyle="bold"
-                android:textSize="15sp"
-                android:text="title here"
-                android:layout_weight="2" />
+                android:textAlignment="textStart"/>
 
             <TextView
                 android:id="@+id/list_item_recycler_view_date"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAlignment="textEnd"
-                android:textSize="15sp"
+                android:layout_marginTop="10dp"
+                android:lines="1"
                 android:text="date here"
-                android:layout_weight="1" />
+                android:textAlignment="textEnd"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/list_item_recycler_view_start_article_light"
+            android:id="@+id/list_item_recycler_view_start_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:textSize="20sp"
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
             android:lines="2"
-            android:ellipsize="end"
-            android:text="start of article here and define line limit to avoid too much text displayed" />
+            android:paddingBottom="5dp"
+            android:text="start of article here and define line limit to avoid too much text displayed  666666"
+            android:textSize="15sp" />
     </LinearLayout>
 </LinearLayout>

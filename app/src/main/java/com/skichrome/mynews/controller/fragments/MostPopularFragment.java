@@ -24,6 +24,5 @@ public class MostPopularFragment extends BaseFragment
     @Override
     protected void updateDesign ()
     {
-        mTextViewTest.setText("It's a test, you're in Most popular Fragment !");
     }
 }

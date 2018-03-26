@@ -24,6 +24,5 @@ public class TopStoriesFragment extends BaseFragment
     @Override
     protected void updateDesign ()
     {
-        mTextViewTest.setText("It's a test, you're in Top Stories Fragment !");
     }
 }

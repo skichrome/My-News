@@ -20,18 +20,6 @@ import icepick.Icepick;
  */
 public abstract class BaseFragment extends Fragment
 {
-    //===============================
-    // Bind views with butterKnife
-    //===============================
-
-    /*
-    @BindView(R.id.list_item_recycler_view_image) ImageView mImageViewRecyclerView;
-    @BindView(R.id.list_item_recycler_view_title) android.widget.TextView mTextViewTitleRecyclerView;
-    @BindView(R.id.list_item_recycler_view_date) TextView mTextViewDateRecyclerView;
-    @BindView(R.id.list_item_recycler_view_start_article_light) TextView mTextViewStartArticleRecyclerView;*/
-
-    @BindView(R.id.test_for_fragment) TextView mTextViewTest;
-
     //=========================
     // Base Abstract Methods
     //=========================
@@ -55,7 +43,7 @@ public abstract class BaseFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Get layout identifier from abstract method
         View view = inflater.inflate(getFragmentLayout(), container, false);
-        // Binding Views
+        //bind view
         ButterKnife.bind(this, view);
         // Configure Design (Developer will call this method instead of override onCreateView())
         this.configureDesign();

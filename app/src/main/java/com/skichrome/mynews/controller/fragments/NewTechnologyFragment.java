@@ -1,6 +1,6 @@
 package com.skichrome.mynews.controller.fragments;
 
-import android.support.v4.app.Fragment;
+        import android.support.v4.app.Fragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +24,5 @@ public class NewTechnologyFragment extends BaseFragment
     @Override
     protected void updateDesign ()
     {
-        mTextViewTest.setText("It's a test, you're in New Tech Fragment !");
     }
 }

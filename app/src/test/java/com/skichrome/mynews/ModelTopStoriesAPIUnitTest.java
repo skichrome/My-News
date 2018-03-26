@@ -50,7 +50,7 @@ public class ModelTopStoriesAPIUnitTest
     }
 
     @Test
-    public void shouldTheTopStoriesAPIModelReturnAllNeededValues()
+    public void shouldTheTopStoriesAPIModelReturnAllNeededValues() throws Exception
     {
         for (Result mResult : mMainNewYorkTimesTopStories.getResults())
         {

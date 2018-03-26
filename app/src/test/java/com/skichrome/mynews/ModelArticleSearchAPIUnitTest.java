@@ -49,7 +49,7 @@ public class ModelArticleSearchAPIUnitTest
     }
 
     @Test
-    public void souldReturnAllFieldsNeededInArticleSearch()
+    public void souldReturnAllFieldsNeededInArticleSearch() throws Exception
     {
         for (Doc doc : mMainNewYorkTimesArticleSearch.getResponse().getDocs())
         {

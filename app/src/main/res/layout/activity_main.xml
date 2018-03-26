@@ -30,10 +30,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:background="@color/colorPrimaryLight"
+            android:background="@color/colorPrimary"
             app:tabIndicatorColor="@color/colorAccent"
             app:tabTextColor="@android:color/white"
-            app:tabSelectedTextColor="@color/colorAccentDark"/>
+
+            app:tabSelectedTextColor="@color/colorAccentDark" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/activity_main_view_pager"

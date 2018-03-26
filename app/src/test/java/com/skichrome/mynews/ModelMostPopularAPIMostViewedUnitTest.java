@@ -34,7 +34,7 @@ public class ModelMostPopularAPIMostViewedUnitTest
     }
 
     @Test
-    public void shouldReturnAllFieldNeededInMostPopularTab()
+    public void shouldReturnAllFieldNeededInMostPopularTab() throws Exception
     {
         for (Result result : mMainNewYorkTimesMostPopular.getResults())
         {
