@@ -1,11 +1,13 @@
 package com.skichrome.mynews;
 
+import com.skichrome.mynews.Utils.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class DateTest
+public class DateUnitTest
 {
     private Date date;
     private String cuttedString;

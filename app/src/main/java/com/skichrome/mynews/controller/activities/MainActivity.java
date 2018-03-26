@@ -20,22 +20,46 @@ import com.skichrome.mynews.view.PageAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * The main activity is used as a controller to display different fragments in a viewPager, a navigation drawer, a toolBar and a tabLayout
+ */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
     //=========================================
     // Fields
     //=========================================
 
+    /**
+     * Contains the toolBar of the app
+     */
     @BindView(R.id.activity_main_toolbar) Toolbar mToolbar;
+    /**
+     * Contains the navigation drawer of the app
+     */
     @BindView(R.id.activity_main_menu_drawer_layout) DrawerLayout mDrawerLayout;
+    /**
+     * include the navigation drawer header and the navigation drawer menu fields
+     */
     @BindView(R.id.activity_main_navigation_view) NavigationView mNavigationView;
+    /**
+     * Used to display a fragment title above the view pager, and allow user to change fragment by clicking on one tab
+     */
     @BindView(R.id.activity_main_tabs) TabLayout mTabLayout;
+    /**
+     * Used to display different fragments on a single view in MainActivity
+     */
     @BindView(R.id.activity_main_view_pager) ViewPager mViewPager;
 
     //=========================================
     // Overrided Methods
     //=========================================
 
+    /**
+     * Called on each activity launch, here used to configure all visual elements
+     *
+     * @param savedInstanceState
+     *      Used for data restoring (if needed, useless in this case)
+     */
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
@@ -50,6 +74,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configureViewPagerAndTabs();
     }
 
+    /**
+     * Get the layout menu and inflate the menu in toolBar
+     * @param menu
+     *      the menu to be inflated
+     * @return
+     *      boolean
+     */
     @Override
     public boolean onCreateOptionsMenu (Menu menu)
     {
@@ -145,6 +176,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Configuration Methods
     //=========================================
 
+    /**
+     * Configure the toolBar with layout menu file, and if the android version is compatible with Lollipop functionality, add z-elevation
+     */
     private void configureToolBar ()
     {
         setSupportActionBar(mToolbar);
@@ -154,6 +188,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mToolbar.setElevation(30);
     }
 
+    /**
+     * configure menu drawer with toolBar and add a listener
+     */
     private void configureMenuDrawer ()
     {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -161,11 +198,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
     }
 
+    /**
+     * set a listener in navigationView
+     */
     private void configureNavigationView ()
     {
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
+    /**
+     * configure the viewPager with specific {@link PageAdapter}, and if the android version is compatible with Lollipop functionality, add z-elevation
+     */
     private void configureViewPagerAndTabs ()
     {
         mViewPager.setAdapter(new PageAdapter(getSupportFragmentManager())

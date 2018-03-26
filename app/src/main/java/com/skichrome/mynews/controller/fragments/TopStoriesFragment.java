@@ -1,9 +1,7 @@
 package com.skichrome.mynews.controller.fragments;
 
-import android.support.v4.app.Fragment;
-
 /**
- * A simple {@link Fragment} subclass.
+ * Contains the data of Top Stories API in a recyclerView
  */
 public class TopStoriesFragment extends BaseFragment
 {
@@ -11,16 +9,27 @@ public class TopStoriesFragment extends BaseFragment
     // Base Methods
     //=====================
 
+    /**
+     * Used each time we have to create this fragment to display it
+     * @return
+     *      new instance of this fragment
+     */
     public static BaseFragment newInstance ()
     {
         return new TopStoriesFragment();
     }
 
+    /**
+     * @see BaseFragment
+     */
     @Override
     protected void configureDesign ()
     {
     }
 
+    /**
+     * @see BaseFragment
+     */
     @Override
     protected void updateDesign ()
     {
