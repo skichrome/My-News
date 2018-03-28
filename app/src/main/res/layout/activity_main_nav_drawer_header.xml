@@ -5,7 +5,7 @@
 
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="176dp"
     android:gravity="center_horizontal"
     android:background="@color/colorPrimary">
 
@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:src="@drawable/new_york_times_logo"/>
+        android:src="@drawable/new_york_times_logo"
+        android:contentDescription="@string/new_york_times_logo_nav_drawer_header"/>
 
 </LinearLayout>

@@ -19,4 +19,5 @@
     <string name="activity_main_menu_drawer_title_most_popular">Most popular</string>
     <string name="activity_main_menu_drawer_title_top_stories">Top stories</string>
     <string name="activity_main_menu_drawer_title_search">Search</string>
+    <string name="new_york_times_logo_nav_drawer_header">New York Times Logo</string>
 </resources>

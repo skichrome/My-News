@@ -147,30 +147,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected (@NonNull MenuItem item)
     {
-        Log.e("Nav Menu", "onNavigationItemSelected:  avant switch");
         switch (item.getItemId())
         {
             case R.id.activity_main_menu_drawer_search :
                 break;
 
             case R.id.activity_main_menu_drawer_top_stories :
+                changeToMostPopularFragmentInViewPager(0);
                 break;
 
             case R.id.activity_main_menu_drawer_most_popular :
+                changeToMostPopularFragmentInViewPager(1);
                 break;
 
             case R.id.activity_main_menu_drawer_new_tech :
+                changeToMostPopularFragmentInViewPager(2);
                 break;
 
-            case R.id.activity_main_menu_notifications :
+            case R.id.activity_main_menu_drawer_notifications :
                 break;
 
-            case R.id.activity_main_menu_help :
+            case R.id.activity_main_menu_drawer_help :
                 launchDetailsAndHelpActivity(1);
                 break;
 
-            case R.id.activity_main_menu_about :
-                Log.e("Nav Menu", "onNavigationItemSelected:  dans switch pos 2");
+            case R.id.activity_main_menu_drawer_about :
                 launchDetailsAndHelpActivity(2);
                 break;
 
@@ -180,6 +181,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START))
+            this.mDrawerLayout.closeDrawer(GravityCompat.START);
+        else
+            super.onBackPressed();
     }
 
     //=========================================
@@ -213,8 +223,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void configureNavigationView ()
     {
-
-        Log.e("Nav Menu", "onNavigationItemSelected:  avant");
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -243,10 +251,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Menus actions Methods
     //=========================================
 
+    /**
+     * generic method that launch a new activity with an id that represent a specific fragment in parameter
+     * @param idOfMenu
+     *      the id that will pe passed to the intent
+     */
     private void launchDetailsAndHelpActivity (int idOfMenu)
     {
         Intent intent = new Intent(this, DetailsAndHelpActivity.class);
         intent.putExtra(ID_DETAILS_HELP_ACTIVITY_FOR_FRAGMENTS, idOfMenu);
         startActivity(intent);
     }
+
+    /**
+     * This method allow changing current viewPager fragment with id in parameters( {@link #onNavigationItemSelected(MenuItem)})
+     * @param fragId
+     *      the fragment id
+     */
+    private void changeToMostPopularFragmentInViewPager(int fragId)
+    {
+        mViewPager.setCurrentItem(fragId);
+    }
+
 }
