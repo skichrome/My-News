@@ -1,6 +1,7 @@
 
 package com.skichrome.mynews.model.mostpopularapimostviewed;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,6 +10,9 @@ public class Result {
     @SerializedName("url")
     @Expose
     private String url;
+    @SerializedName("adx_keywords")
+    @Expose
+    private String adxKeywords;
     @SerializedName("column")
     @Expose
     private String column;
@@ -18,6 +22,9 @@ public class Result {
     @SerializedName("byline")
     @Expose
     private String byline;
+    @SerializedName("type")
+    @Expose
+    private String type;
     @SerializedName("title")
     @Expose
     private String title;
@@ -30,18 +37,34 @@ public class Result {
     @SerializedName("source")
     @Expose
     private String source;
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("asset_id")
+    @Expose
+    private Integer assetId;
+    @SerializedName("views")
+    @Expose
+    private Integer views;
+
+    /*  /!\     Cause error on API request, DO NOT uncomment !  /!\
     @SerializedName("des_facet")
     @Expose
-    private DesFacet desFacet;
+    private List<String> desFacet = null;
     @SerializedName("org_facet")
     @Expose
-    private OrgFacet orgFacet;
+    private List<String> orgFacet = null;
     @SerializedName("per_facet")
     @Expose
-    private PerFacet perFacet;
+    private String perFacet;
     @SerializedName("geo_facet")
     @Expose
-    private GeoFacet geoFacet;
+    private List<String> geoFacet;
+     /!\    Cause error on API request, DO NOT uncomment !   /!\  */
+
+    @SerializedName("media")
+    @Expose
+    private List<Medium> media = null;
 
     public String getUrl() {
         return url;
@@ -49,6 +72,14 @@ public class Result {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getAdxKeywords() {
+        return adxKeywords;
+    }
+
+    public void setAdxKeywords(String adxKeywords) {
+        this.adxKeywords = adxKeywords;
     }
 
     public String getColumn() {
@@ -73,6 +104,14 @@ public class Result {
 
     public void setByline(String byline) {
         this.byline = byline;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getTitle() {
@@ -107,36 +146,71 @@ public class Result {
         this.source = source;
     }
 
-    public DesFacet getDesFacet() {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getAssetId() {
+        return assetId;
+    }
+
+    public void setAssetId(Integer assetId) {
+        this.assetId = assetId;
+    }
+
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
+    }
+
+
+    /*   /!\   Cause error on API request, DO NOT uncomment !   /!\
+    public List<String> getDesFacet() {
         return desFacet;
     }
 
-    public void setDesFacet(DesFacet desFacet) {
+    public void setDesFacet(List<String> desFacet) {
         this.desFacet = desFacet;
     }
 
-    public OrgFacet getOrgFacet() {
+    public List<String> getOrgFacet() {
         return orgFacet;
     }
 
-    public void setOrgFacet(OrgFacet orgFacet) {
+    public void setOrgFacet(List<String> orgFacet) {
         this.orgFacet = orgFacet;
     }
 
-    public PerFacet getPerFacet() {
+    public String getPerFacet() {
         return perFacet;
     }
 
-    public void setPerFacet(PerFacet perFacet) {
+    public void setPerFacet(String perFacet) {
         this.perFacet = perFacet;
     }
 
-    public GeoFacet getGeoFacet() {
+    public List<String> getGeoFacet() {
         return geoFacet;
     }
 
-    public void setGeoFacet(GeoFacet geoFacet) {
+    public void setGeoFacet(List<String> geoFacet) {
         this.geoFacet = geoFacet;
     }
+     /!\    Cause error on API request, DO NOT uncomment !  /!\    */
 
+
+    public List<Medium> getMedia() {
+        return media;
+    }
+
+    public void setMedia(List<Medium> media) {
+        this.media = media;
+    }
 }

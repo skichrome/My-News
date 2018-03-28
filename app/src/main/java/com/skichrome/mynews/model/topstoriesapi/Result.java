@@ -22,12 +22,6 @@ public class Result {
     @SerializedName("url")
     @Expose
     private String url;
-    @SerializedName("thumbnail_standard")
-    @Expose
-    private String thumbnailStandard;
-    @SerializedName("short_url")
-    @Expose
-    private String shortUrl;
     @SerializedName("byline")
     @Expose
     private String byline;
@@ -64,9 +58,9 @@ public class Result {
     @SerializedName("multimedia")
     @Expose
     private List<Multimedium> multimedia = null;
-    @SerializedName("related_urls")
+    @SerializedName("short_url")
     @Expose
-    private List<RelatedUrl> relatedUrls = null;
+    private String shortUrl;
 
     public String getSection() {
         return section;
@@ -106,22 +100,6 @@ public class Result {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getThumbnailStandard() {
-        return thumbnailStandard;
-    }
-
-    public void setThumbnailStandard(String thumbnailStandard) {
-        this.thumbnailStandard = thumbnailStandard;
-    }
-
-    public String getShortUrl() {
-        return shortUrl;
-    }
-
-    public void setShortUrl(String shortUrl) {
-        this.shortUrl = shortUrl;
     }
 
     public String getByline() {
@@ -220,12 +198,12 @@ public class Result {
         this.multimedia = multimedia;
     }
 
-    public List<RelatedUrl> getRelatedUrls() {
-        return relatedUrls;
+    public String getShortUrl() {
+        return shortUrl;
     }
 
-    public void setRelatedUrls(List<RelatedUrl> relatedUrls) {
-        this.relatedUrls = relatedUrls;
+    public void setShortUrl(String shortUrl) {
+        this.shortUrl = shortUrl;
     }
 
 }

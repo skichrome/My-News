@@ -4,9 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.skichrome.mynews.controller.fragments.MostPopularFragment;
-import com.skichrome.mynews.controller.fragments.NewTechnologyFragment;
-import com.skichrome.mynews.controller.fragments.TopStoriesFragment;
+import com.skichrome.mynews.controller.fragments.mainactivityfragments.MostPopularRecyclerViewFragment;
+import com.skichrome.mynews.controller.fragments.mainactivityfragments.NewTechnologyRecyclerViewFragment;
+import com.skichrome.mynews.controller.fragments.mainactivityfragments.TopStoriesRecyclerViewFragment;
 
 /**
  * This adapter send the correct fragment to display
@@ -37,16 +37,16 @@ public class PageAdapter extends FragmentStatePagerAdapter
         switch (position)
         {
             case 0 :
-                return TopStoriesFragment.newInstance();
+                return TopStoriesRecyclerViewFragment.newInstance();
 
             case 1 :
-                return MostPopularFragment.newInstance();
+                return MostPopularRecyclerViewFragment.newInstance();
 
             case 2 :
-                return NewTechnologyFragment.newInstance();
+                return NewTechnologyRecyclerViewFragment.newInstance();
 
-                default:
-                    return TopStoriesFragment.newInstance();
+            default:
+                return TopStoriesRecyclerViewFragment.newInstance();
         }
     }
 

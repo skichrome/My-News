@@ -7,23 +7,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class Byline {
 
-    @SerializedName("organization")
-    @Expose
-    private String organization;
     @SerializedName("original")
     @Expose
     private String original;
     @SerializedName("person")
     @Expose
-    private List<String> person = null;
-
-    public String getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(String organization) {
-        this.organization = organization;
-    }
+    private List<Person> person = null;
+    @SerializedName("organization")
+    @Expose
+    private Object organization;
 
     public String getOriginal() {
         return original;
@@ -33,12 +25,20 @@ public class Byline {
         this.original = original;
     }
 
-    public List<String> getPerson() {
+    public List<Person> getPerson() {
         return person;
     }
 
-    public void setPerson(List<String> person) {
+    public void setPerson(List<Person> person) {
         this.person = person;
+    }
+
+    public Object getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Object organization) {
+        this.organization = organization;
     }
 
 }

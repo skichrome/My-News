@@ -27,7 +27,7 @@ public class ModelArticleSearchAPIUnitTest
         List<Multimedium> mMultimediumList = new ArrayList<>();
 
         mDocTemp.setWebUrl("http://www.amazingarticleURL.fr/");
-        mDocTemp.setSectionName("Amazing section name");
+        mDocTemp.setNewDesk("Amazing section name");
 
         //set a multimedium test array
         Multimedium mTempMultimedium = new Multimedium();
@@ -54,7 +54,7 @@ public class ModelArticleSearchAPIUnitTest
         for (Doc doc : mMainNewYorkTimesArticleSearch.getResponse().getDocs())
         {
             assertThat("all variables must be present in the model fields", doc.getWebUrl() != null);
-            assertThat("all variables must be present in the model fields", doc.getSectionName() != null);
+            assertThat("all variables must be present in the model fields", doc.getNewDesk() != null);
 
             for (Multimedium multimedium : doc.getMultimedia())
             {

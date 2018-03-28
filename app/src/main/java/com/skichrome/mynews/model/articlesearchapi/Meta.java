@@ -9,12 +9,12 @@ public class Meta {
     @SerializedName("hits")
     @Expose
     private Integer hits;
-    @SerializedName("time")
-    @Expose
-    private Integer time;
     @SerializedName("offset")
     @Expose
     private Integer offset;
+    @SerializedName("time")
+    @Expose
+    private Integer time;
 
     public Integer getHits() {
         return hits;
@@ -24,20 +24,20 @@ public class Meta {
         this.hits = hits;
     }
 
-    public Integer getTime() {
-        return time;
-    }
-
-    public void setTime(Integer time) {
-        this.time = time;
-    }
-
     public Integer getOffset() {
         return offset;
     }
 
     public void setOffset(Integer offset) {
         this.offset = offset;
+    }
+
+    public Integer getTime() {
+        return time;
+    }
+
+    public void setTime(Integer time) {
+        this.time = time;
     }
 
 }

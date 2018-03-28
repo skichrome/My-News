@@ -1,9 +1,10 @@
 
 package com.skichrome.mynews.model.articlesearchapi;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class Doc {
 
@@ -13,42 +14,30 @@ public class Doc {
     @SerializedName("snippet")
     @Expose
     private String snippet;
-    @SerializedName("lead_paragraph")
-    @Expose
-    private String leadParagraph;
-    @SerializedName("abstract")
-    @Expose
-    private String _abstract;
-    @SerializedName("print_page")
-    @Expose
-    private String printPage;
     @SerializedName("blog")
     @Expose
-    private List<String> blog = null;
+    private Blog blog;
     @SerializedName("source")
     @Expose
     private String source;
+    @SerializedName("multimedia")
+    @Expose
+    private List<Multimedium> multimedia = null;
     @SerializedName("headline")
     @Expose
     private Headline headline;
     @SerializedName("keywords")
     @Expose
-    private Keywords keywords;
+    private List<Keyword> keywords = null;
     @SerializedName("pub_date")
     @Expose
     private String pubDate;
     @SerializedName("document_type")
     @Expose
     private String documentType;
-    @SerializedName("news_desK")
+    @SerializedName("new_desk")
     @Expose
-    private String newsDesK;
-    @SerializedName("section_name")
-    @Expose
-    private String sectionName;
-    @SerializedName("subsection_name")
-    @Expose
-    private String subsectionName;
+    private String newDesk;
     @SerializedName("byline")
     @Expose
     private Byline byline;
@@ -60,13 +49,16 @@ public class Doc {
     private String id;
     @SerializedName("word_count")
     @Expose
-    private String wordCount;
-    @SerializedName("slideshow_credits")
+    private Integer wordCount;
+    @SerializedName("score")
     @Expose
-    private String slideshowCredits;
-    @SerializedName("multimedia")
+    private Double score;
+    @SerializedName("uri")
     @Expose
-    private List<Multimedium> multimedia = null;
+    private String uri;
+    @SerializedName("print_page")
+    @Expose
+    private String printPage;
 
     public String getWebUrl() {
         return webUrl;
@@ -84,35 +76,11 @@ public class Doc {
         this.snippet = snippet;
     }
 
-    public String getLeadParagraph() {
-        return leadParagraph;
-    }
-
-    public void setLeadParagraph(String leadParagraph) {
-        this.leadParagraph = leadParagraph;
-    }
-
-    public String getAbstract() {
-        return _abstract;
-    }
-
-    public void setAbstract(String _abstract) {
-        this._abstract = _abstract;
-    }
-
-    public String getPrintPage() {
-        return printPage;
-    }
-
-    public void setPrintPage(String printPage) {
-        this.printPage = printPage;
-    }
-
-    public List<String> getBlog() {
+    public Blog getBlog() {
         return blog;
     }
 
-    public void setBlog(List<String> blog) {
+    public void setBlog(Blog blog) {
         this.blog = blog;
     }
 
@@ -124,6 +92,14 @@ public class Doc {
         this.source = source;
     }
 
+    public List<Multimedium> getMultimedia() {
+        return multimedia;
+    }
+
+    public void setMultimedia(List<Multimedium> multimedia) {
+        this.multimedia = multimedia;
+    }
+
     public Headline getHeadline() {
         return headline;
     }
@@ -132,11 +108,11 @@ public class Doc {
         this.headline = headline;
     }
 
-    public Keywords getKeywords() {
+    public List<Keyword> getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(Keywords keywords) {
+    public void setKeywords(List<Keyword> keywords) {
         this.keywords = keywords;
     }
 
@@ -156,28 +132,12 @@ public class Doc {
         this.documentType = documentType;
     }
 
-    public String getNewsDesK() {
-        return newsDesK;
+    public String getNewDesk() {
+        return newDesk;
     }
 
-    public void setNewsDesK(String newsDesK) {
-        this.newsDesK = newsDesK;
-    }
-
-    public String getSectionName() {
-        return sectionName;
-    }
-
-    public void setSectionName(String sectionName) {
-        this.sectionName = sectionName;
-    }
-
-    public String getSubsectionName() {
-        return subsectionName;
-    }
-
-    public void setSubsectionName(String subsectionName) {
-        this.subsectionName = subsectionName;
+    public void setNewDesk(String newDesk) {
+        this.newDesk = newDesk;
     }
 
     public Byline getByline() {
@@ -204,28 +164,36 @@ public class Doc {
         this.id = id;
     }
 
-    public String getWordCount() {
+    public Integer getWordCount() {
         return wordCount;
     }
 
-    public void setWordCount(String wordCount) {
+    public void setWordCount(Integer wordCount) {
         this.wordCount = wordCount;
     }
 
-    public String getSlideshowCredits() {
-        return slideshowCredits;
+    public Double getScore() {
+        return score;
     }
 
-    public void setSlideshowCredits(String slideshowCredits) {
-        this.slideshowCredits = slideshowCredits;
+    public void setScore(Double score) {
+        this.score = score;
     }
 
-    public List<Multimedium> getMultimedia() {
-        return multimedia;
+    public String getUri() {
+        return uri;
     }
 
-    public void setMultimedia(List<Multimedium> multimedia) {
-        this.multimedia = multimedia;
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public String getPrintPage() {
+        return printPage;
+    }
+
+    public void setPrintPage(String printPage) {
+        this.printPage = printPage;
     }
 
 }
