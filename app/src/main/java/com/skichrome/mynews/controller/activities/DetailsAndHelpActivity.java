@@ -14,7 +14,7 @@ import com.skichrome.mynews.controller.fragments.otheractivitiesfragments.HelpFr
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.skichrome.mynews.controller.activities.MainActivity.ID_DETAILS_HELP_ACTIVITY_FOR_FRAGMENTS;
+import static com.skichrome.mynews.controller.activities.MainActivity.ID_OTHERS_ACTIVITIES;
 
 public class DetailsAndHelpActivity extends AppCompatActivity
 {
@@ -22,7 +22,6 @@ public class DetailsAndHelpActivity extends AppCompatActivity
     // Fields
     //=========================================
 
-    private int idToLaunchFragment;
     private Fragment helpFragment;
     private Fragment aboutFragment;
     private Fragment articleDetailsFragment;
@@ -41,17 +40,14 @@ public class DetailsAndHelpActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
 
-        idToLaunchFragment = getIntent().getIntExtra(ID_DETAILS_HELP_ACTIVITY_FOR_FRAGMENTS, 0);
-
         configureToolBar();
-        configureAndShowFragmentById();
+        configureAndShowFragmentById(getIntent().getIntExtra(ID_OTHERS_ACTIVITIES, 0));
     }
 
     private void configureToolBar ()
     {
         setSupportActionBar(mToolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -59,17 +55,17 @@ public class DetailsAndHelpActivity extends AppCompatActivity
     // Fragments Methods
     //=========================================
 
-    private void configureAndShowFragmentById ()
+    private void configureAndShowFragmentById (int idToLaunchFragment)
     {
         switch (idToLaunchFragment)
         {
-            case 1 :
+            case 0 :
                 showHelpFragment();
                 break;
-            case 2 :
+            case 1 :
                 showAboutFragment();
                 break;
-            case 3 :
+            case 2 :
                 showArticleDetailsFragment();
                 break;
 
@@ -83,6 +79,8 @@ public class DetailsAndHelpActivity extends AppCompatActivity
         if (this.helpFragment == null)
             this.helpFragment = HelpFragment.newInstance();
 
+        setTitle("Help");
+
         this.startTransactionFragment(this.helpFragment);
     }
 
@@ -91,7 +89,9 @@ public class DetailsAndHelpActivity extends AppCompatActivity
         if (this.aboutFragment == null)
             this.aboutFragment = AboutFragment.newInstance();
 
-        mToolbar.setTitle("About");
+
+        setTitle("About");
+
         this.startTransactionFragment(this.aboutFragment);
     }
 
@@ -100,7 +100,6 @@ public class DetailsAndHelpActivity extends AppCompatActivity
         if (this.articleDetailsFragment == null)
             this.articleDetailsFragment = ArticleDetailsFragment.newInstance();
 
-        mToolbar.setTitle("Help");
         this.startTransactionFragment(this.articleDetailsFragment);
     }
 

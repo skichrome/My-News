@@ -8,9 +8,19 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- ToolBar style -->
     <style name="ToolBarStyle"  parent="AppTheme">
         <item name="android:textColorPrimary">@android:color/black</item>
         <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
+    <!-- Separator style -->
+    <style name="separator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
     </style>
 
 </resources>

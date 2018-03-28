@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Fields
     //=========================================
 
-    public static final String ID_DETAILS_HELP_ACTIVITY_FOR_FRAGMENTS = "Details_and_help_activity";
+    public static final String ID_OTHERS_ACTIVITIES = "Details_and_help_activity";
 
     /**
      * Contains the toolBar of the app
@@ -118,17 +117,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId())
         {
             case R.id.activity_main_menu_search :
+                launchSearchActivity(0);
                 return true;
 
             case R.id.activity_main_menu_notifications :
+                launchSearchActivity(1);
                 return true;
 
             case R.id.activity_main_menu_help :
-                launchDetailsAndHelpActivity(1);
+                launchDetailsAndHelpActivity(0);
                 return true;
 
             case R.id.activity_main_menu_about :
-                launchDetailsAndHelpActivity(2);
+                launchDetailsAndHelpActivity(1);
                 return true;
 
             default :
@@ -150,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId())
         {
             case R.id.activity_main_menu_drawer_search :
+                launchSearchActivity(0);
                 break;
 
             case R.id.activity_main_menu_drawer_top_stories :
@@ -165,14 +167,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.activity_main_menu_drawer_notifications :
+                launchSearchActivity(1);
                 break;
 
             case R.id.activity_main_menu_drawer_help :
-                launchDetailsAndHelpActivity(1);
+                launchDetailsAndHelpActivity(0);
                 break;
 
             case R.id.activity_main_menu_drawer_about :
-                launchDetailsAndHelpActivity(2);
+                launchDetailsAndHelpActivity(1);
                 break;
 
             default :
@@ -259,7 +262,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void launchDetailsAndHelpActivity (int idOfMenu)
     {
         Intent intent = new Intent(this, DetailsAndHelpActivity.class);
-        intent.putExtra(ID_DETAILS_HELP_ACTIVITY_FOR_FRAGMENTS, idOfMenu);
+        intent.putExtra(ID_OTHERS_ACTIVITIES, idOfMenu);
+        startActivity(intent);
+    }
+
+    private void launchSearchActivity(int fragId)
+    {
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra(ID_OTHERS_ACTIVITIES, fragId);
         startActivity(intent);
     }
 

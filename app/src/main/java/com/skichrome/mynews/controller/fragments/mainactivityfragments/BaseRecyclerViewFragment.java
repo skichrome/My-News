@@ -75,7 +75,8 @@ public abstract class BaseRecyclerViewFragment extends Fragment
         // Configure Design (Developer will call this method instead of override onCreateView())
         this.configureDesign();
 
-        updateDesign();
+        //update design
+        this.updateDesign();
 
         return(view);
     }

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- search keywords entry -->
+    <EditText
+        android:id="@+id/fragment_base_search_notification_keywords_edit_text"
+        android:hint="@string/fragment_base_search_search_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:textColorHighlight="@color/colorPrimary"
+        android:textSize="20sp"
+        android:inputType="text"/>
+
+    <!-- date management -->
+    <LinearLayout
+        android:id="@+id/fragment_base_search_notification_date_management_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <!-- Date caption -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:hint="@string/fragment_base_search_begin_date"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:hint="@string/fragment_base_search_end_date" />
+
+        </LinearLayout>
+
+        <!-- Date entry fields -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/fragment_base_search_notification_begin_date"
+                android:hint="@string/date_format"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:inputType="date" />
+
+            <EditText
+                android:id="@+id/fragment_base_search_notification_end_date"
+                android:hint="@string/date_format"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:inputType="date" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- CheckBoxes for search request -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="fill_horizontal"
+        android:orientation="horizontal"
+        android:padding="20dp"
+
+        android:baselineAligned="false">
+
+        <!-- 3 Left checkBoxes -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <CheckBox
+                android:id="@+id/fragment_base_search_notification_arts_check_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/fragment_base_search_arts"
+                android:textSize="15sp"/>
+
+            <CheckBox
+                android:id="@+id/fragment_base_search_notification_business_check_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/fragment_base_search_business"
+                android:textSize="15sp"/>
+
+            <CheckBox
+                android:id="@+id/fragment_base_search_notification_entrepreneurs_check_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/fragment_base_search_entrepreneurs"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <!-- 3 right CheckBoxes -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <CheckBox
+                android:id="@+id/fragment_base_search_notification_politics_check_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/fragment_base_search_politics"
+                android:textSize="15sp"/>
+
+            <CheckBox
+                android:id="@+id/fragment_base_search_notification_sports_check_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/fragment_base_search_sports"
+                android:textSize="15sp"/>
+
+            <CheckBox
+                android:id="@+id/fragment_base_search_notification_travel_check_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/fragment_base_search_travel"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- separator -->
+    <View style="@style/separator"
+        android:id="@+id/fragment_base_search_notification_separator"/>
+
+    <!-- Notification switch -->
+    <Switch
+        android:id="@+id/fragment_base_search_notification_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="25dp"
+        android:text="@string/fragment_base_search_notifications_switch"/>
+
+    <!-- search button -->
+    <Button
+        android:id="@+id/fragment_base_search_notification_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="@string/fragment_base_search_search_btn_text"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:layout_margin="25dp"/>
+
+</LinearLayout>

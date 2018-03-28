@@ -20,4 +20,19 @@
     <string name="activity_main_menu_drawer_title_top_stories">Top stories</string>
     <string name="activity_main_menu_drawer_title_search">Search</string>
     <string name="new_york_times_logo_nav_drawer_header">New York Times Logo</string>
+
+    <!-- Used In SearchActivity and linked fragments -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragment_base_search_search_field">Search query items</string>
+    <string name="fragment_base_search_politics">Politics</string>
+    <string name="fragment_base_search_sports">Sports</string>
+    <string name="fragment_base_search_travel">Travel</string>
+    <string name="fragment_base_search_entrepreneurs">Entrepreneurs</string>
+    <string name="fragment_base_search_business">Business</string>
+    <string name="fragment_base_search_arts">Arts</string>
+    <string name="fragment_base_search_end_date">End Date</string>
+    <string name="fragment_base_search_begin_date">Begin Date</string>
+    <string name="fragment_base_search_notifications_switch">Enable notifications (once per day)</string>
+    <string name="fragment_base_search_search_btn_text">Search</string>
+    <string name="date_format">DD/MM/YYYY</string>
 </resources>
