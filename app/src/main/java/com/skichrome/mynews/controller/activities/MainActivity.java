@@ -1,5 +1,6 @@
 package com.skichrome.mynews.controller.activities;
 
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -11,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -29,10 +31,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Fields
     //=========================================
 
+    public static final String ID_DETAILS_HELP_ACTIVITY_FOR_FRAGMENTS = "Details_and_help_activity";
+
     /**
      * Contains the toolBar of the app
      */
-    @BindView(R.id.activity_main_toolbar) Toolbar mToolbar;
+    @BindView(R.id.activity_toolbar) Toolbar mToolbar;
     /**
      * Contains the navigation drawer of the app
      */
@@ -120,9 +124,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
 
             case R.id.activity_main_menu_help :
+                launchDetailsAndHelpActivity(1);
                 return true;
 
             case R.id.activity_main_menu_about :
+                launchDetailsAndHelpActivity(2);
                 return true;
 
             default :
@@ -141,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected (@NonNull MenuItem item)
     {
+        Log.e("Nav Menu", "onNavigationItemSelected:  avant switch");
         switch (item.getItemId())
         {
             case R.id.activity_main_menu_drawer_search :
@@ -159,9 +166,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.activity_main_menu_help :
+                launchDetailsAndHelpActivity(1);
                 break;
 
             case R.id.activity_main_menu_about :
+                Log.e("Nav Menu", "onNavigationItemSelected:  dans switch pos 2");
+                launchDetailsAndHelpActivity(2);
                 break;
 
             default :
@@ -203,6 +213,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void configureNavigationView ()
     {
+
+        Log.e("Nav Menu", "onNavigationItemSelected:  avant");
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -225,5 +237,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mTabLayout.setElevation(30);
             mViewPager.setElevation(5);
         }
+    }
+
+    //=========================================
+    // Menus actions Methods
+    //=========================================
+
+    private void launchDetailsAndHelpActivity (int idOfMenu)
+    {
+        Intent intent = new Intent(this, DetailsAndHelpActivity.class);
+        intent.putExtra(ID_DETAILS_HELP_ACTIVITY_FOR_FRAGMENTS, idOfMenu);
+        startActivity(intent);
     }
 }

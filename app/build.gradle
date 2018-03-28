@@ -56,8 +56,11 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.0'
 
     //Able to bind an image directly with an url (useful with API)
-    implementation 'com.github.bumptech.glide:glide:4.2.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
+    implementation('com.github.bumptech.glide:glide:4.6.1@aar')
+            {
+                transitive = true
+            }
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
 
     //Used for web request
     implementation 'com.google.code.gson:gson:2.8.2'
