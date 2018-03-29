@@ -41,7 +41,7 @@ public class DetailsAndHelpActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         configureToolBar();
-        configureAndShowFragmentById(getIntent().getIntExtra(ID_OTHERS_ACTIVITIES, 0));
+        configureAndShowFragmentById(getIntent().getStringExtra(ID_OTHERS_ACTIVITIES));
     }
 
     private void configureToolBar ()
@@ -55,21 +55,19 @@ public class DetailsAndHelpActivity extends AppCompatActivity
     // Fragments Methods
     //=========================================
 
-    private void configureAndShowFragmentById (int idToLaunchFragment)
+    private void configureAndShowFragmentById (String idToLaunchFragment)
     {
         switch (idToLaunchFragment)
         {
-            case 0 :
+            case "help" :
                 showHelpFragment();
                 break;
-            case 1 :
+            case "about" :
                 showAboutFragment();
-                break;
-            case 2 :
-                showArticleDetailsFragment();
                 break;
 
             default :
+                showArticleDetailsFragment(idToLaunchFragment);
                 break;
         }
     }
@@ -95,10 +93,14 @@ public class DetailsAndHelpActivity extends AppCompatActivity
         this.startTransactionFragment(this.aboutFragment);
     }
 
-    private void showArticleDetailsFragment ()
+    private void showArticleDetailsFragment (String url)
     {
         if (this.articleDetailsFragment == null)
             this.articleDetailsFragment = ArticleDetailsFragment.newInstance();
+
+        Bundle bundle = new Bundle();
+        bundle.putString(ID_OTHERS_ACTIVITIES, url);
+        articleDetailsFragment.setArguments(bundle);
 
         this.startTransactionFragment(this.articleDetailsFragment);
     }

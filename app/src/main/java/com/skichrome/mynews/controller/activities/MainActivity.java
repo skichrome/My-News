@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.skichrome.mynews.R;
+import com.skichrome.mynews.controller.fragments.mainactivityfragments.BaseRecyclerViewFragment;
 import com.skichrome.mynews.view.PageAdapter;
 
 import butterknife.BindView;
@@ -24,7 +25,7 @@ import butterknife.ButterKnife;
 /**
  * The main activity is used as a controller to display different fragments in a viewPager, a navigation drawer, a toolBar and a tabLayout
  */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, BaseRecyclerViewFragment.OnRecyclerViewItemClicked
 {
     //=========================================
     // Fields
@@ -125,11 +126,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
 
             case R.id.activity_main_menu_help :
-                launchDetailsAndHelpActivity(0);
+                launchDetailsAndHelpActivity("help");
                 return true;
 
             case R.id.activity_main_menu_about :
-                launchDetailsAndHelpActivity(1);
+                launchDetailsAndHelpActivity("about");
                 return true;
 
             default :
@@ -171,11 +172,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.activity_main_menu_drawer_help :
-                launchDetailsAndHelpActivity(0);
+                launchDetailsAndHelpActivity("help");
                 break;
 
             case R.id.activity_main_menu_drawer_about :
-                launchDetailsAndHelpActivity(1);
+                launchDetailsAndHelpActivity("about");
                 break;
 
             default :
@@ -193,6 +194,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.mDrawerLayout.closeDrawer(GravityCompat.START);
         else
             super.onBackPressed();
+    }
+
+
+    /**
+     * Used to launch details activity that can display an article in WebView
+     * @param url
+     *      the url to the article on the web
+     */
+    @Override
+    public void onRVItemclicked(String url)
+    {
+        launchDetailsAndHelpActivity(url);
     }
 
     //=========================================
@@ -256,13 +269,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * generic method that launch a new activity with an id that represent a specific fragment in parameter
-     * @param idOfMenu
+     * @param mUrlId
      *      the id that will pe passed to the intent
      */
-    private void launchDetailsAndHelpActivity (int idOfMenu)
+    private void launchDetailsAndHelpActivity( String mUrlId)
     {
         Intent intent = new Intent(this, DetailsAndHelpActivity.class);
-        intent.putExtra(ID_OTHERS_ACTIVITIES, idOfMenu);
+        intent.putExtra(ID_OTHERS_ACTIVITIES, mUrlId);
         startActivity(intent);
     }
 
@@ -282,5 +295,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         mViewPager.setCurrentItem(fragId);
     }
-
 }

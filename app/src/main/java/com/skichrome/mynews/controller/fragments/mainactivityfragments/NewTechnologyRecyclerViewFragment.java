@@ -1,23 +1,11 @@
 package com.skichrome.mynews.controller.fragments.mainactivityfragments;
 
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.bumptech.glide.Glide;
-import com.skichrome.mynews.R;
 import com.skichrome.mynews.Utils.NewYorkTimesStreams;
-import com.skichrome.mynews.model.articlesearchapi.Doc;
 import com.skichrome.mynews.model.articlesearchapi.MainNewYorkTimesArticleSearch;
-import com.skichrome.mynews.view.NewTechRVAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 /**
@@ -25,29 +13,6 @@ import io.reactivex.observers.DisposableObserver;
  */
 public class NewTechnologyRecyclerViewFragment extends BaseRecyclerViewFragment
 {
-    //=====================
-    // Fields
-    //=====================
-
-    /**
-     * Link to the recyclerView container
-     */
-    @BindView(R.id.base_fragment_recycler_view)
-    RecyclerView recyclerView;
-
-    /**
-     * Contains the list of article downloaded
-     */
-    private List<Doc> mDocList;
-    /**
-     * Adapter field
-     */
-    private NewTechRVAdapter mNewTechRVAdapter;
-    /**
-     * Used for http request
-     */
-    Disposable disposable;
-
     //=====================
     // Base Methods
     //=====================
@@ -63,55 +28,15 @@ public class NewTechnologyRecyclerViewFragment extends BaseRecyclerViewFragment
     }
 
     /**
-     * @see BaseRecyclerViewFragment
+     * Send a request on API and update list by calling updateListResults method
      */
     @Override
     protected void configureDesign ()
     {
-        executeHttpRequest();
-        configureRecyclerView();
-    }
+        //=========================
+        // Http Request Method
+        //=========================
 
-    /**
-     * configure refresh on user swipe down on top of recyclerView
-     */
-    @Override
-    protected void updateDesign ()
-    {
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
-        {
-            @Override
-            public void onRefresh ()
-            {
-                executeHttpRequest();
-            }
-        });
-    }
-
-    //=====================
-    // Fragment Methods
-    //=====================
-
-    private void configureRecyclerView ()
-    {
-        if (this.mDocList == null)
-            this.mDocList = new ArrayList<>();
-
-        this.mNewTechRVAdapter = new NewTechRVAdapter(mDocList, Glide.with(this));
-        this.recyclerView.setAdapter(mNewTechRVAdapter);
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        //set a separation in each cells in recyclerView
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-    }
-
-    //=========================
-    // Http Request Methods
-    //=========================
-
-    private void executeHttpRequest ()
-    {
         this.disposable = NewYorkTimesStreams.streamDownloadArticleSearchAPI("trump", "20180301", "20180329", "newest", false).subscribeWith(new DisposableObserver<MainNewYorkTimesArticleSearch>()
         {
             /**
@@ -160,11 +85,29 @@ public class NewTechnologyRecyclerViewFragment extends BaseRecyclerViewFragment
         });
     }
 
+    /**
+     * configure refresh on user swipe down on top of recyclerView
+     */
+    @Override
+    protected void updateDesign ()
+    {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh ()
+            {
+                configureDesign();
+            }
+        });
+    }
+
+
     private void updateListResults (MainNewYorkTimesArticleSearch mMainNewYorkTimesArticleSearch)
     {
         swipeRefreshLayout.setRefreshing(false);
-        this.mDocList.clear();
-        this.mDocList.addAll(mMainNewYorkTimesArticleSearch.getResponse().getDocs());
-        this.mNewTechRVAdapter.notifyDataSetChanged();
+        this.resultList.clear();
+
+        this.resultList.addAll(dataAPIConverter.convertArticleSearchResult(mMainNewYorkTimesArticleSearch.getResponse().getDocs()));
+        this.genericRVAdapter.notifyDataSetChanged();
     }
 }

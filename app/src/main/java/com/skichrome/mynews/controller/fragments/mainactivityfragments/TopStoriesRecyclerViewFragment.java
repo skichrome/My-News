@@ -1,23 +1,11 @@
 package com.skichrome.mynews.controller.fragments.mainactivityfragments;
 
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.bumptech.glide.Glide;
-import com.skichrome.mynews.R;
 import com.skichrome.mynews.Utils.NewYorkTimesStreams;
 import com.skichrome.mynews.model.topstoriesapi.MainNewYorkTimesTopStories;
-import com.skichrome.mynews.model.topstoriesapi.Result;
-import com.skichrome.mynews.view.TopStoriesRVAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 /**
@@ -25,28 +13,6 @@ import io.reactivex.observers.DisposableObserver;
  */
 public class TopStoriesRecyclerViewFragment extends BaseRecyclerViewFragment
 {
-    //=====================
-    // Fields
-    //=====================
-
-    /**
-     * Link to the recyclerView container
-     */
-    @BindView(R.id.base_fragment_recycler_view) RecyclerView recyclerView;
-
-    /**
-     * Contains the list of article downloaded
-     */
-    private List<Result> mResultList;
-    /**
-     * Adapter field
-     */
-    private TopStoriesRVAdapter mTopStoriesAdapter;
-    /**
-     * Used for http request
-     */
-    Disposable disposable;
-
     //=====================
     // Base Methods
     //=====================
@@ -62,13 +28,60 @@ public class TopStoriesRecyclerViewFragment extends BaseRecyclerViewFragment
     }
 
     /**
-     * @see BaseRecyclerViewFragment
+     * Send a request on API and update list by calling updateListResults method
      */
     @Override
     protected void configureDesign ()
     {
-        executeHttpRequest();
-        configureRecyclerView();
+        //=========================
+        // HTTP Request Method
+        //=========================
+
+        this.disposable = NewYorkTimesStreams.streamDownloadTopStoriesAPI("home").subscribeWith(new DisposableObserver<MainNewYorkTimesTopStories>()
+        {
+            /**
+             * Provides the Observer with a new item to observe.
+             * <p>
+             * The {@link io.reactivex.Observable} may call this method 0 or more times.
+             * <p>
+             * The {@code Observable} will not call this method again after it calls either {@link #onComplete} or
+             * {@link #onError}.
+             *
+             * @param mainNewYorkTimesTopStories
+             *         the item emitted by the Observable
+             */
+            @Override
+            public void onNext (MainNewYorkTimesTopStories mainNewYorkTimesTopStories)
+            {
+                updateListResults(mainNewYorkTimesTopStories);
+            }
+
+            /**
+             * Notifies the Observer that the {@link io.reactivex.Observable} has experienced an error condition.
+             * <p>
+             * If the {@link io.reactivex.Observable} calls this method, it will not thereafter call {@link #onNext} or
+             * {@link #onComplete}.
+             *
+             * @param e
+             *         the exception encountered by the Observable
+             */
+            @Override
+            public void onError (Throwable e)
+            {
+                Log.e(this.getClass().getSimpleName(), "onError : ", e);
+            }
+
+            /**
+             * Notifies the Observer that the {@link io.reactivex.Observable} has finished sending push-based notifications.
+             * <p>
+             * The {@link io.reactivex.Observable} will not call this method if it calls {@link #onError}.
+             */
+            @Override
+            public void onComplete ()
+            {
+                Log.i(this.getClass().getSimpleName(), "onComplete : Background task terminated !");
+            }
+        });
     }
 
 
@@ -83,63 +96,22 @@ public class TopStoriesRecyclerViewFragment extends BaseRecyclerViewFragment
             @Override
             public void onRefresh ()
             {
-                executeHttpRequest();
+                configureDesign();
             }
         });
     }
 
-    //=====================
-    // Fragment Methods
-    //=====================
-
-    private void configureRecyclerView ()
-    {
-        if (this.mResultList == null)
-            this.mResultList = new ArrayList<>();
-
-        this.mTopStoriesAdapter = new TopStoriesRVAdapter(mResultList, Glide.with(this));
-        this.recyclerView.setAdapter(this.mTopStoriesAdapter);
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        //set a separation in each cells in recyclerView
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-    }
 
     //=========================
-    // Http Request Methods
+    // Methods
     //=========================
-
-    private void executeHttpRequest()
-    {
-        this.disposable = NewYorkTimesStreams.streamDownloadTopStoriesAPI("home").subscribeWith(new DisposableObserver<MainNewYorkTimesTopStories>()
-        {
-            @Override
-            public void onNext (MainNewYorkTimesTopStories mainNewYorkTimesTopStories)
-            {
-                Log.e("-----TopStories-----", "onNext: Success !");
-                updateListResults(mainNewYorkTimesTopStories);
-            }
-
-            @Override
-            public void onError (Throwable e)
-            {
-                Log.e(this.getClass().getSimpleName(), "onError : ", e);
-            }
-
-            @Override
-            public void onComplete ()
-            {
-                Log.i(this.getClass().getSimpleName(), "onComplete : Background task terminated !");
-            }
-        });
-    }
 
 private void updateListResults (MainNewYorkTimesTopStories mMainNewYorkTimesTopStories)
     {
         swipeRefreshLayout.setRefreshing(false);
-        this.mResultList.clear();
-        this.mResultList.addAll(mMainNewYorkTimesTopStories.getResults());
-        this.mTopStoriesAdapter.notifyDataSetChanged();
+        this.resultList.clear();
+
+        this.resultList.addAll(dataAPIConverter.convertTopStoriesResult(mMainNewYorkTimesTopStories.getResults()));
+        this.genericRVAdapter.notifyDataSetChanged();
     }
 }

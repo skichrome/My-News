@@ -50,5 +50,4 @@ public class MediaMetadatum {
     public void setWidth(Integer width) {
         this.width = width;
     }
-
 }

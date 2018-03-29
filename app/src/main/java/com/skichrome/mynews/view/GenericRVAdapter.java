@@ -8,15 +8,11 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.RequestManager;
 import com.skichrome.mynews.R;
-import com.skichrome.mynews.controller.fragments.mainactivityfragments.TopStoriesRecyclerViewFragment;
-import com.skichrome.mynews.model.topstoriesapi.Result;
+import com.skichrome.mynews.Utils.ArticleSampleForAPIConverter;
 
 import java.util.List;
 
-/**
- * This adapter is used for Recycler view in {@link TopStoriesRecyclerViewFragment}
- */
-public class TopStoriesRVAdapter extends RecyclerView.Adapter<TopStoriesRVViewHolder>
+public class GenericRVAdapter extends RecyclerView.Adapter<GenericRVViewHolder>
 {
     //=====================
     // Fields
@@ -25,7 +21,7 @@ public class TopStoriesRVAdapter extends RecyclerView.Adapter<TopStoriesRVViewHo
     /**
      * Contains the list of articles to be displayed
      */
-    private List<Result> resultList;
+    private List<ArticleSampleForAPIConverter> articleList;
     /**
      * Used in the viewHolder to set image with a web url
      */
@@ -42,9 +38,9 @@ public class TopStoriesRVAdapter extends RecyclerView.Adapter<TopStoriesRVViewHo
      * @param mGlide
      *      Used in the viewHolder to set image with a web url
      */
-    public TopStoriesRVAdapter (List<Result> mResultList, RequestManager mGlide)
+    public GenericRVAdapter(List<ArticleSampleForAPIConverter> mResultList, RequestManager mGlide)
     {
-        this.resultList = mResultList;
+        this.articleList = mResultList;
         this.glide = mGlide;
     }
 
@@ -67,11 +63,12 @@ public class TopStoriesRVAdapter extends RecyclerView.Adapter<TopStoriesRVViewHo
      */
     @NonNull
     @Override
-    public TopStoriesRVViewHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType)
+    public GenericRVViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.recycler_view_list_item, parent, false);
-        return new TopStoriesRVViewHolder(view);
+
+        return new GenericRVViewHolder(view);
     }
 
     /**
@@ -86,9 +83,9 @@ public class TopStoriesRVAdapter extends RecyclerView.Adapter<TopStoriesRVViewHo
      *         The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder (@NonNull TopStoriesRVViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull GenericRVViewHolder holder, int position)
     {
-        holder.updateWithTopStoriesApiData(this.resultList.get(position), this.glide);
+        holder.updateRecyclerViewItemData(articleList.get(position), glide);
     }
 
     /**
@@ -97,8 +94,17 @@ public class TopStoriesRVAdapter extends RecyclerView.Adapter<TopStoriesRVViewHo
      * @return The total number of items in this adapter.
      */
     @Override
-    public int getItemCount ()
+    public int getItemCount()
     {
-        return resultList.size();
+        return articleList.size();
     }
+
+    /**
+     * Used for click support on RecyclerView
+     */
+    public String getArticle(int position)
+    {
+        return this.articleList.get(position).getArticleUrl();
+    }
+
 }
