@@ -180,7 +180,7 @@ public class ArticleSampleForAPIConverter
     public void configureArticleForArticleSearch(Doc mDoc)
     {
         //Check the String returned, and replace it with a more friendly String
-        if (mDoc.getNewDesk().equals("None"))
+        if (mDoc.getNewDesk() == null || mDoc.getNewDesk().equals("None"))
             this.section = "News";
         else
             this.section = convertSectionId(mDoc.getNewDesk()); //convert String before assign it
@@ -188,8 +188,11 @@ public class ArticleSampleForAPIConverter
         this.title = mDoc.getHeadline().getMain();
 
         //convert date before set it to field
-        dateConverter.extractDataFromDateFormatted(dateConverter.deleteEndOfString(mDoc.getPubDate()));
-        this.date = dateConverter.toString();
+        if (mDoc.getPubDate() != null)
+        {
+            dateConverter.extractDataFromDateFormatted(dateConverter.deleteEndOfString(mDoc.getPubDate()));
+            this.date = dateConverter.toString();
+        }
 
         this.articleUrl = mDoc.getWebUrl();
 

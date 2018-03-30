@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.skichrome.mynews.controller.fragments.mainactivityfragments.MostPopularRecyclerViewFragment;
-import com.skichrome.mynews.controller.fragments.mainactivityfragments.NewTechnologyRecyclerViewFragment;
+import com.skichrome.mynews.controller.fragments.mainactivityfragments.ArticleSearchRecyclerViewFragment;
 import com.skichrome.mynews.controller.fragments.mainactivityfragments.TopStoriesRecyclerViewFragment;
 
 /**
@@ -43,7 +43,7 @@ public class PageAdapter extends FragmentStatePagerAdapter
                 return MostPopularRecyclerViewFragment.newInstance();
 
             case 2 :
-                return NewTechnologyRecyclerViewFragment.newInstance();
+                return ArticleSearchRecyclerViewFragment.newInstance();
 
             default:
                 return TopStoriesRecyclerViewFragment.newInstance();
@@ -80,7 +80,7 @@ public class PageAdapter extends FragmentStatePagerAdapter
                 return "Most Popular";
 
             case 2 :
-                return "New Tech";
+                return "Article Search";
 
             default:
                 return "Page " + position;

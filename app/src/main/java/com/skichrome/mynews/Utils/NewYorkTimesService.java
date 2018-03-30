@@ -4,6 +4,8 @@ import com.skichrome.mynews.model.articlesearchapi.MainNewYorkTimesArticleSearch
 import com.skichrome.mynews.model.mostpopularapimostviewed.MainNewYorkTimesMostPopular;
 import com.skichrome.mynews.model.topstoriesapi.MainNewYorkTimesTopStories;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -49,16 +51,11 @@ public interface NewYorkTimesService
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
 
-
-
-
     @GET("articlesearch.json?api-key=e4a8b2318952484aa1aacefbd54277cd")
     Observable<MainNewYorkTimesArticleSearch> getCustomArticles(
-            @Query("searchQueryItem") String searchQueryItem,
-            @Query("beginDate") String beginDate,
-            @Query("endDate") String endDate,
-            @Query("sort") String sort,
-            @Query("highLight") Boolean highLight);
+            @Query("q") List<String> searchQueryItem,
+            @Query("begin_date") String beginDate,
+            @Query("end_date") String endDate);
 
     Retrofit retrofitArticleSearch = new Retrofit.Builder()
             .baseUrl("http://api.nytimes.com/svc/search/v2/")

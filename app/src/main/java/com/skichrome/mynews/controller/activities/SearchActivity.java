@@ -1,21 +1,25 @@
 package com.skichrome.mynews.controller.activities;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.skichrome.mynews.R;
+import com.skichrome.mynews.controller.fragments.mainactivityfragments.ArticleSearchRecyclerViewFragment;
+import com.skichrome.mynews.controller.fragments.mainactivityfragments.BaseRecyclerViewFragment;
 import com.skichrome.mynews.controller.fragments.otheractivitiesfragments.NotificationsFragment;
 import com.skichrome.mynews.controller.fragments.otheractivitiesfragments.SearchFragment;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
 import static com.skichrome.mynews.controller.activities.MainActivity.ID_OTHERS_ACTIVITIES;
 
-public class SearchActivity extends AppCompatActivity
+public class SearchActivity extends AppCompatActivity implements SearchFragment.OnButtonSearchClickedCallback, BaseRecyclerViewFragment.OnRecyclerViewItemClicked
 {
     //=========================================
     // Fields
@@ -25,6 +29,7 @@ public class SearchActivity extends AppCompatActivity
 
     Fragment notificationsFragment;
     Fragment searchFragment;
+    Fragment articleSearchFragment;
 
     //=========================================
     // Base methods
@@ -42,6 +47,20 @@ public class SearchActivity extends AppCompatActivity
 
         configureAndShowFragmentById(getIntent().getIntExtra(ID_OTHERS_ACTIVITIES, 0));
 
+    }
+
+    @Override
+    public void onButtonSearchClicked(ArrayList<String> mQueryList, String mBeginDate, String mEndDate)
+    {
+        showArticleSearchFragment(mQueryList, mBeginDate, mEndDate);
+    }
+
+    @Override
+    public void onRVItemClicked(String url)
+    {
+        Intent intent = new Intent(this, DetailsAndHelpActivity.class);
+        intent.putExtra(ID_OTHERS_ACTIVITIES, url);
+        startActivity(intent);
     }
 
     private void configureToolBar ()
@@ -90,6 +109,23 @@ public class SearchActivity extends AppCompatActivity
         setTitle("Search");
 
         startTransactionFragment(searchFragment);
+    }
+
+    private void showArticleSearchFragment(ArrayList<String> mQueryList, String mBeginDate, String mEndDate)
+    {
+        if (articleSearchFragment == null)
+            articleSearchFragment = ArticleSearchRecyclerViewFragment.newInstance();
+
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("SEARCH_DATA_LIST", mQueryList);
+        bundle.putString("SEARCH_DATA_BEGIN_DATE", mBeginDate);
+        bundle.putString("SEARCH_DATA_END_DATE", mEndDate);
+        articleSearchFragment.setArguments(bundle);
+
+        setTitle("Search Results");
+
+        startTransactionFragment(articleSearchFragment);
+
     }
 
     private void startTransactionFragment(Fragment mFragment)

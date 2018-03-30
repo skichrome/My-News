@@ -1,18 +1,40 @@
 package com.skichrome.mynews.controller.fragments.mainactivityfragments;
 
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
 import com.skichrome.mynews.Utils.NewYorkTimesStreams;
 import com.skichrome.mynews.model.articlesearchapi.MainNewYorkTimesArticleSearch;
 
+import java.util.ArrayList;
+
 import io.reactivex.observers.DisposableObserver;
 
 /**
  * Contains the data of Article Search API in a recyclerView
  */
-public class NewTechnologyRecyclerViewFragment extends BaseRecyclerViewFragment
+public class ArticleSearchRecyclerViewFragment extends BaseRecyclerViewFragment
 {
+    //=====================
+    // Fields
+    //=====================
+
+    /**
+     * contains a list of query search keywords for api request search
+     */
+    private ArrayList<String> queryList;
+
+    /**
+     * contain begin date for api request search
+     */
+    private String beginDate = null;
+
+    /**
+     * contain end date for api request search
+     */
+    private String endDate = null;
+
     //=====================
     // Base Methods
     //=====================
@@ -24,7 +46,7 @@ public class NewTechnologyRecyclerViewFragment extends BaseRecyclerViewFragment
      */
     public static BaseRecyclerViewFragment newInstance ()
     {
-        return new NewTechnologyRecyclerViewFragment();
+        return new ArticleSearchRecyclerViewFragment();
     }
 
     /**
@@ -33,11 +55,13 @@ public class NewTechnologyRecyclerViewFragment extends BaseRecyclerViewFragment
     @Override
     protected void configureDesign ()
     {
+        getSearchParameters();
+
         //=========================
         // Http Request Method
         //=========================
 
-        this.disposable = NewYorkTimesStreams.streamDownloadArticleSearchAPI("trump", "20180301", "20180329", "newest", false).subscribeWith(new DisposableObserver<MainNewYorkTimesArticleSearch>()
+        this.disposable = NewYorkTimesStreams.streamDownloadArticleSearchAPI(this.queryList, this.beginDate, this.endDate).subscribeWith(new DisposableObserver<MainNewYorkTimesArticleSearch>()
         {
             /**
              * Provides the Observer with a new item to observe.
@@ -109,5 +133,23 @@ public class NewTechnologyRecyclerViewFragment extends BaseRecyclerViewFragment
 
         this.resultList.addAll(dataAPIConverter.convertArticleSearchResult(mMainNewYorkTimesArticleSearch.getResponse().getDocs()));
         this.genericRVAdapter.notifyDataSetChanged();
+    }
+
+    private void getSearchParameters()
+    {
+        this.queryList = new ArrayList<>();
+
+        Bundle bundle = getArguments();
+
+        if (bundle != null)
+        {
+            this.queryList.addAll(bundle.getStringArrayList("SEARCH_DATA_LIST"));
+            this.beginDate = bundle.getString("SEARCH_DATA_BEGIN_DATE", null);
+            this.endDate = bundle.getString("SEARCH_DATA_END_DATE", null);
+        }
+        /*else
+            this.queryList.add("technology");*/
+
+        Log.d("----------------", "getSearchParameters: " + queryList.toString());
     }
 }

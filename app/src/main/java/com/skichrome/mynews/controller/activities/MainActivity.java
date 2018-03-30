@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      *      the url to the article on the web
      */
     @Override
-    public void onRVItemclicked(String url)
+    public void onRVItemClicked(String url)
     {
         launchDetailsAndHelpActivity(url);
     }

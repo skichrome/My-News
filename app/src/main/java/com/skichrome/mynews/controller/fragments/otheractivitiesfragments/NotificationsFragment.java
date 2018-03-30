@@ -7,7 +7,7 @@ import android.view.View;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NotificationsFragment extends BaseSearchFragment
+public class NotificationsFragment extends BaseSearchFragment implements View.OnClickListener
 {
     //=====================
     // Empty Constructor
@@ -49,16 +49,23 @@ public class NotificationsFragment extends BaseSearchFragment
     @Override
     public void configureDesign()
     {
+        this.removeUnnecessaryFields();
+        this.mSwitch.setOnClickListener(this);
     }
 
     /**
-     * @see BaseSearchFragment
+     * Remove the date selection fields and the button because they are useless in this fragment
      */
-    @Override
     protected void removeUnnecessaryFields()
     {
         this.mLinearLayout.setVisibility(View.GONE);
         this.mBtn.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        this.getDataFromEntryFields();
     }
 
     //=====================

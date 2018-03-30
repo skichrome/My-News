@@ -4,6 +4,7 @@ import com.skichrome.mynews.model.articlesearchapi.MainNewYorkTimesArticleSearch
 import com.skichrome.mynews.model.mostpopularapimostviewed.MainNewYorkTimesMostPopular;
 import com.skichrome.mynews.model.topstoriesapi.MainNewYorkTimesTopStories;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -34,14 +35,12 @@ public class NewYorkTimesStreams
                 .timeout(20, TimeUnit.SECONDS);
     }
 
-    public static Observable<MainNewYorkTimesArticleSearch> streamDownloadArticleSearchAPI(String searchQueryItem,
+    public static Observable<MainNewYorkTimesArticleSearch> streamDownloadArticleSearchAPI(List<String> searchQueryItem,
                                                                                            String beginDate,
-                                                                                           String endDate,
-                                                                                           String sort,
-                                                                                           Boolean highLight)
+                                                                                           String endDate)
     {
         NewYorkTimesService newYorkTimesService = NewYorkTimesService.retrofitArticleSearch.create(NewYorkTimesService.class);
-        return newYorkTimesService.getCustomArticles(searchQueryItem, beginDate, endDate, sort, highLight)
+        return newYorkTimesService.getCustomArticles(searchQueryItem, beginDate, endDate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(20, TimeUnit.SECONDS);

@@ -38,7 +38,7 @@ public abstract class BaseRecyclerViewFragment extends Fragment
 
     public interface OnRecyclerViewItemClicked
     {
-        void onRVItemclicked(String url);
+        void onRVItemClicked(String url);
     }
 
     //=========================
@@ -154,7 +154,7 @@ public abstract class BaseRecyclerViewFragment extends Fragment
         }
         catch (ClassCastException e)
         {
-            Log.e(" createCallback ", " Must Implement OnButtonClickedListener ", e);
+            Log.e("createCallback", " Must Implement OnButtonClickedListener ", e);
         }
     }
 
@@ -187,7 +187,7 @@ public abstract class BaseRecyclerViewFragment extends Fragment
                         Log.d("ItemClickSupport", "Position : " + position);
                         String articleUrl = genericRVAdapter.getArticle(position);
 
-                        mCallback.onRVItemclicked(articleUrl);
+                        mCallback.onRVItemClicked(articleUrl);
                     }
                 });
     }

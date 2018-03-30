@@ -73,4 +73,7 @@ dependencies {
 
     //used to combine two lines on top
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+    //Combine AlarmManager and JobScheduler, compatible from Android 4 to Oreo
+    implementation 'com.evernote:android-job:1.2.5'
 }

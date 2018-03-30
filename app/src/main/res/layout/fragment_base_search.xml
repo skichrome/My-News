@@ -53,23 +53,21 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <EditText
+            <TextView
                 android:id="@+id/fragment_base_search_notification_begin_date"
                 android:hint="@string/date_format"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="20sp"
-                android:inputType="date" />
+                android:textSize="20sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/fragment_base_search_notification_end_date"
                 android:hint="@string/date_format"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="20sp"
-                android:inputType="date" />
+                android:textSize="20sp" />
 
         </LinearLayout>
 
