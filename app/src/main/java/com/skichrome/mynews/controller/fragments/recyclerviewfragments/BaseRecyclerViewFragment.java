@@ -1,4 +1,4 @@
-package com.skichrome.mynews.controller.fragments.mainactivityfragments;
+package com.skichrome.mynews.controller.fragments.recyclerviewfragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -36,8 +36,16 @@ public abstract class BaseRecyclerViewFragment extends Fragment
     // CallBack Interface
     //=========================
 
+    /**
+     * Used for callback to activities
+     */
     public interface OnRecyclerViewItemClicked
     {
+        /**
+         * Used when user click on a recyclerView cell to do something
+         * @param url
+         *      the url of article selected by user
+         */
         void onRVItemClicked(String url);
     }
 
@@ -48,6 +56,10 @@ public abstract class BaseRecyclerViewFragment extends Fragment
      * Link to the recyclerView container
      */
     @BindView(R.id.base_fragment_recycler_view) RecyclerView recyclerView;
+    /**
+     * Link to the refresh layout xml container
+     */
+    @BindView(R.id.base_fragment_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
     /**
      * Adapter field
      */
@@ -60,9 +72,13 @@ public abstract class BaseRecyclerViewFragment extends Fragment
      * Used for http request
      */
     Disposable disposable;
-
-    @BindView(R.id.base_fragment_swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
+    /**
+     * Used to convert each api request in a formatted article list with only interesting fields, allow to use only one recyclerView adatper and view holder in the app
+     */
     protected DataAPIConverter dataAPIConverter = new DataAPIConverter();
+    /**
+     * Used for activity callback
+     */
     protected OnRecyclerViewItemClicked mCallback;
 
     //=========================
@@ -73,7 +89,6 @@ public abstract class BaseRecyclerViewFragment extends Fragment
      * Used to configure the design, for example here will be executed the http Request, the RecyclerView will be configured here
      */
     protected abstract void configureDesign();
-
     /**
      * configure refresh on user swipe down on top of recyclerView
      */
@@ -98,13 +113,13 @@ public abstract class BaseRecyclerViewFragment extends Fragment
      * Called when a fragment needs to be displayed, setup the views (ButterKnife) and call the configureDesign method (defined in child class)
      *
      * @param inflater
-     *      used to setup view
+     *      LayoutInflater: The LayoutInflater object that can be used to inflate any views in the fragment,
      * @param container
-     *      used to setup view
+     *      ViewGroup: If non-null, this is the parent view that the fragment's UI should be attached to. The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
      * @param savedInstanceState
-     *      Used to restore data if needed
+     *      Bundle: If non-null, this fragment is being re-constructed from a previous saved state as given here.
      * @return
-     *      a view
+     *      Return the View for the fragment's UI, or null.
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -125,6 +140,11 @@ public abstract class BaseRecyclerViewFragment extends Fragment
         return(view);
     }
 
+    /**
+     * Used here to create callbac kto parent activity
+     * @param context
+     *      	Context
+     */
     @Override
     public void onAttach(Context context)
     {
@@ -162,6 +182,9 @@ public abstract class BaseRecyclerViewFragment extends Fragment
     // RecyclerView Methods
     //=========================
 
+    /**
+     * Used to configure the recyclerView, and to set a divider between each recyclerView cells
+     */
     private void configureRecyclerView ()
     {
         if (this.resultList == null)
@@ -176,7 +199,10 @@ public abstract class BaseRecyclerViewFragment extends Fragment
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    protected void configureOnClickRecyclerView()
+    /**
+     * Configure the possibility of user to have a callback when he click on a recyclerView item.
+     */
+    private void configureOnClickRecyclerView()
     {
         ItemClickSupportOnRecyclerView.addTo(recyclerView, R.layout.recycler_view_list_item)
                 .setOnItemClickListener(new ItemClickSupportOnRecyclerView.OnItemClickListener()

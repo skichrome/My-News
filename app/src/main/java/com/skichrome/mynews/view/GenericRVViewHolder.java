@@ -12,6 +12,9 @@ import com.skichrome.mynews.Utils.ArticleSampleForAPIConverter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * A View Holder used for data update in cells of RecyclerView
+ */
 public class GenericRVViewHolder extends RecyclerView.ViewHolder
 {
     //=====================

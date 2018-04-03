@@ -21,6 +21,7 @@ public interface NewYorkTimesService
 {
     /**
      * Request on TopStories API
+     *
      * @param section
      *      The section to return
      * @return
@@ -37,12 +38,13 @@ public interface NewYorkTimesService
 
     /**
      * Request on Most popular API
+     *
      * @param section
      *      The section to return
      * @return
      *      new instance of Retrofit
      */
-    @GET("{section}/1.json?api-key=e4a8b2318952484aa1aacefbd54277cd")
+    @GET("{section}/30.json?api-key=e4a8b2318952484aa1aacefbd54277cd")
     Observable<MainNewYorkTimesMostPopular> getMostPopular(@Path("section") String section);
 
     Retrofit retrofitMostPopular = new Retrofit.Builder()
@@ -51,6 +53,18 @@ public interface NewYorkTimesService
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
 
+    /**
+     * Request on Article Search API
+     *
+     * @param searchQueryItem
+     *      a list of keywords used for the request
+     * @param beginDate
+     *      Request on Most popular API
+     * @param endDate
+     *      Request on Most popular API
+     * @return
+     *      new instance of Retrofit
+     */
     @GET("articlesearch.json?api-key=e4a8b2318952484aa1aacefbd54277cd")
     Observable<MainNewYorkTimesArticleSearch> getCustomArticles(
             @Query("q") List<String> searchQueryItem,

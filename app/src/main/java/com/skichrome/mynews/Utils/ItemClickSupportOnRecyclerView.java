@@ -3,6 +3,10 @@ package com.skichrome.mynews.Utils;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+
+/**
+ * @see <a href="https://www.littlerobots.nl/blog/Handle-Android-RecyclerView-Clicks/">Getting your clicks on RecyclerView</a>
+ */
 public class ItemClickSupportOnRecyclerView
 {
     private final RecyclerView mRecyclerView;

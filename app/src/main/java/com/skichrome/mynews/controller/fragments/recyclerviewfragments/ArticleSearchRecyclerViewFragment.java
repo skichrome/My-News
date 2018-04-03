@@ -1,18 +1,40 @@
-package com.skichrome.mynews.controller.fragments.mainactivityfragments;
+package com.skichrome.mynews.controller.fragments.recyclerviewfragments;
 
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
 import com.skichrome.mynews.Utils.NewYorkTimesStreams;
-import com.skichrome.mynews.model.topstoriesapi.MainNewYorkTimesTopStories;
+import com.skichrome.mynews.model.articlesearchapi.MainNewYorkTimesArticleSearch;
+
+import java.util.ArrayList;
 
 import io.reactivex.observers.DisposableObserver;
 
 /**
- * Contains the data of Top Stories API in a recyclerView
+ * Contains the data of Article Search API in a recyclerView
  */
-public class TopStoriesRecyclerViewFragment extends BaseRecyclerViewFragment
+public class ArticleSearchRecyclerViewFragment extends BaseRecyclerViewFragment
 {
+    //=====================
+    // Fields
+    //=====================
+
+    /**
+     * contains a list of query search keywords for api request search
+     */
+    private ArrayList<String> queryList;
+
+    /**
+     * contain begin date for api request search
+     */
+    private String beginDate = null;
+
+    /**
+     * contain end date for api request search
+     */
+    private String endDate = null;
+
     //=====================
     // Base Methods
     //=====================
@@ -24,7 +46,7 @@ public class TopStoriesRecyclerViewFragment extends BaseRecyclerViewFragment
      */
     public static BaseRecyclerViewFragment newInstance ()
     {
-        return new TopStoriesRecyclerViewFragment();
+        return new ArticleSearchRecyclerViewFragment();
     }
 
     /**
@@ -33,11 +55,13 @@ public class TopStoriesRecyclerViewFragment extends BaseRecyclerViewFragment
     @Override
     protected void configureDesign ()
     {
+        getSearchParameters();
+
         //=========================
-        // HTTP Request Method
+        // Http Request Method
         //=========================
 
-        this.disposable = NewYorkTimesStreams.streamDownloadTopStoriesAPI("home").subscribeWith(new DisposableObserver<MainNewYorkTimesTopStories>()
+        this.disposable = NewYorkTimesStreams.streamDownloadArticleSearchAPI(this.queryList, this.beginDate, this.endDate).subscribeWith(new DisposableObserver<MainNewYorkTimesArticleSearch>()
         {
             /**
              * Provides the Observer with a new item to observe.
@@ -47,13 +71,14 @@ public class TopStoriesRecyclerViewFragment extends BaseRecyclerViewFragment
              * The {@code Observable} will not call this method again after it calls either {@link #onComplete} or
              * {@link #onError}.
              *
-             * @param mainNewYorkTimesTopStories
+             * @param mainNewYorkTimesArticleSearch
              *         the item emitted by the Observable
              */
             @Override
-            public void onNext (MainNewYorkTimesTopStories mainNewYorkTimesTopStories)
+            public void onNext (MainNewYorkTimesArticleSearch mainNewYorkTimesArticleSearch)
             {
-                updateListResults(mainNewYorkTimesTopStories);
+                Log.e("-----ArticleSearch-----", "onNext: Success ! Size of list : " + mainNewYorkTimesArticleSearch.getResponse().getDocs().size());
+                updateListResults(mainNewYorkTimesArticleSearch);
             }
 
             /**
@@ -84,7 +109,6 @@ public class TopStoriesRecyclerViewFragment extends BaseRecyclerViewFragment
         });
     }
 
-
     /**
      * configure refresh on user swipe down on top of recyclerView
      */
@@ -101,17 +125,35 @@ public class TopStoriesRecyclerViewFragment extends BaseRecyclerViewFragment
         });
     }
 
-
-    //=========================
-    // Methods
-    //=========================
-
-private void updateListResults (MainNewYorkTimesTopStories mMainNewYorkTimesTopStories)
+    /**
+     * Used to update api request results with data downloaded, format it in a usable form.
+     *
+     * @param mMainNewYorkTimesArticleSearch
+     *      The result object
+     */
+    private void updateListResults (MainNewYorkTimesArticleSearch mMainNewYorkTimesArticleSearch)
     {
         swipeRefreshLayout.setRefreshing(false);
         this.resultList.clear();
 
-        this.resultList.addAll(dataAPIConverter.convertTopStoriesResult(mMainNewYorkTimesTopStories.getResults()));
+        this.resultList.addAll(dataAPIConverter.convertArticleSearchResult(mMainNewYorkTimesArticleSearch.getResponse().getDocs()));
         this.genericRVAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Get the parameters stored in bundle, to launch specific api request
+     */
+    private void getSearchParameters()
+    {
+        this.queryList = new ArrayList<>();
+
+        Bundle bundle = getArguments();
+
+        if (bundle != null)
+        {
+            this.queryList.addAll(bundle.getStringArrayList("SEARCH_DATA_LIST"));
+            this.beginDate = bundle.getString("SEARCH_DATA_BEGIN_DATE", null);
+            this.endDate = bundle.getString("SEARCH_DATA_END_DATE", null);
+        }
     }
 }

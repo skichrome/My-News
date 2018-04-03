@@ -1,4 +1,4 @@
-package com.skichrome.mynews.controller.fragments.mainactivityfragments;
+package com.skichrome.mynews.controller.fragments.recyclerviewfragments;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -13,17 +13,23 @@ import io.reactivex.observers.DisposableObserver;
  */
 public class MostPopularRecyclerViewFragment extends BaseRecyclerViewFragment
 {
+    /**
+     * Updated with the section that we want to do the api request
+     */
+    private static String section;
+
     //=====================
     // Base Methods
     //=====================
 
     /**
-     * Used each time we have to create this fragment to display it
+     * Used each time we have to create this fragment to display it, initialise section field
      * @return
      *      new instance of this fragment
      */
-    public static BaseRecyclerViewFragment newInstance ()
+    public static BaseRecyclerViewFragment newInstance (String mSection)
     {
+        section = mSection;
         return new MostPopularRecyclerViewFragment();
     }
 
@@ -37,7 +43,7 @@ public class MostPopularRecyclerViewFragment extends BaseRecyclerViewFragment
         // Http Request Method
         //=========================
 
-        this.disposable = NewYorkTimesStreams.streamDownloadMostPopularAPI("all-sections").subscribeWith(new DisposableObserver<MainNewYorkTimesMostPopular>()
+        this.disposable = NewYorkTimesStreams.streamDownloadMostPopularAPI(section).subscribeWith(new DisposableObserver<MainNewYorkTimesMostPopular>()
         {
             /**
              * Provides the Observer with a new item to observe.
@@ -100,6 +106,13 @@ public class MostPopularRecyclerViewFragment extends BaseRecyclerViewFragment
             }
         });
     }
+
+    /**
+     * Used to update api request results with data downloaded, format it in a usable form.
+     *
+     * @param mMainNewYorkTimesMostPopular
+     *      The result object
+     */
     private void updateListResults (MainNewYorkTimesMostPopular mMainNewYorkTimesMostPopular)
     {
         swipeRefreshLayout.setRefreshing(false);

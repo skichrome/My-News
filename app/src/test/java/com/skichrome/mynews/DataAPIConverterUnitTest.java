@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class DataAPIConverterTest
+public class DataAPIConverterUnitTest
 {
     private MainNewYorkTimesArticleSearch mMainNewYorkTimesArticleSearch = new MainNewYorkTimesArticleSearch();
     private DataAPIConverter dataAPIConverter = new DataAPIConverter();

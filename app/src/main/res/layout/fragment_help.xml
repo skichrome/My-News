@@ -6,7 +6,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.skichrome.mynews.controller.fragments.otheractivitiesfragments.HelpFragment">
+    tools:context="com.skichrome.mynews.controller.fragments.otherfragments.HelpFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

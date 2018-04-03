@@ -12,6 +12,9 @@ import com.skichrome.mynews.Utils.ArticleSampleForAPIConverter;
 
 import java.util.List;
 
+/**
+ * An adapter used to display cells in RecyclerView
+ */
 public class GenericRVAdapter extends RecyclerView.Adapter<GenericRVViewHolder>
 {
     //=====================

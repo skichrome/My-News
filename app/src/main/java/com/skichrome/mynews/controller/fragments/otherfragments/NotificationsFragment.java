@@ -1,11 +1,9 @@
-package com.skichrome.mynews.controller.fragments.otheractivitiesfragments;
+package com.skichrome.mynews.controller.fragments.otherfragments;
 
-
-import android.support.v4.app.Fragment;
 import android.view.View;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Used for notification parameters screen
  */
 public class NotificationsFragment extends BaseSearchFragment implements View.OnClickListener
 {
@@ -62,6 +60,12 @@ public class NotificationsFragment extends BaseSearchFragment implements View.On
         this.mBtn.setVisibility(View.GONE);
     }
 
+    /**
+     * Used to get user data and set the notifications to On or Off
+     *
+     * @param v
+     *      contain the view clicked by the user
+     */
     @Override
     public void onClick(View v)
     {

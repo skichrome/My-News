@@ -4,14 +4,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.skichrome.mynews.controller.fragments.mainactivityfragments.MostPopularRecyclerViewFragment;
-import com.skichrome.mynews.controller.fragments.mainactivityfragments.ArticleSearchRecyclerViewFragment;
-import com.skichrome.mynews.controller.fragments.mainactivityfragments.TopStoriesRecyclerViewFragment;
+import com.skichrome.mynews.controller.fragments.recyclerviewfragments.MostPopularRecyclerViewFragment;
+import com.skichrome.mynews.controller.fragments.recyclerviewfragments.TopStoriesRecyclerViewFragment;
 
 /**
  * This adapter send the correct fragment to display
  */
-
 public class PageAdapter extends FragmentStatePagerAdapter
 {
     /**
@@ -37,16 +35,25 @@ public class PageAdapter extends FragmentStatePagerAdapter
         switch (position)
         {
             case 0 :
-                return TopStoriesRecyclerViewFragment.newInstance();
+                return TopStoriesRecyclerViewFragment.newInstance("home");
 
             case 1 :
-                return MostPopularRecyclerViewFragment.newInstance();
+                return MostPopularRecyclerViewFragment.newInstance("all-sections");
 
             case 2 :
-                return ArticleSearchRecyclerViewFragment.newInstance();
+                return TopStoriesRecyclerViewFragment.newInstance("technology");
+
+            case 3 :
+                return TopStoriesRecyclerViewFragment.newInstance("sports");
+
+            case 4 :
+                return TopStoriesRecyclerViewFragment.newInstance("science");
+
+            case 5 :
+                return TopStoriesRecyclerViewFragment.newInstance("automobiles");
 
             default:
-                return TopStoriesRecyclerViewFragment.newInstance();
+                return TopStoriesRecyclerViewFragment.newInstance("home");
         }
     }
 
@@ -58,7 +65,7 @@ public class PageAdapter extends FragmentStatePagerAdapter
     @Override
     public int getCount ()
     {
-        return 3;
+        return 6;
     }
 
     /**
@@ -80,7 +87,16 @@ public class PageAdapter extends FragmentStatePagerAdapter
                 return "Most Popular";
 
             case 2 :
-                return "Article Search";
+                return "Technology";
+
+            case 3 :
+                return "Sports";
+
+            case 4 :
+                return "Science";
+
+            case 5 :
+                return "Automobiles";
 
             default:
                 return "Page " + position;

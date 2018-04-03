@@ -12,11 +12,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Used for Http Request on Top Stories API
+ * Used for Http Request on New York Times API
  */
-
 public class NewYorkTimesStreams
 {
+    /**
+     * Used for Http Request on Top Stories API
+     *
+     * @param section
+     *      the section to filter article results
+     * @return
+     *      new observable
+     */
     public static Observable<MainNewYorkTimesTopStories> streamDownloadTopStoriesAPI (String section)
     {
         NewYorkTimesService newYorkTimesService = NewYorkTimesService.retrofitTopStories.create(NewYorkTimesService.class);
@@ -26,6 +33,14 @@ public class NewYorkTimesStreams
                 .timeout(20, TimeUnit.SECONDS);
     }
 
+    /**
+     * Used for Http Request on Most Popular API
+     *
+     * @param section
+     *      the section to filter article results
+     * @return
+     *      new observable
+     */
     public static Observable<MainNewYorkTimesMostPopular> streamDownloadMostPopularAPI (String section)
     {
         NewYorkTimesService newYorkTimesService = NewYorkTimesService.retrofitMostPopular.create(NewYorkTimesService.class);
@@ -34,7 +49,19 @@ public class NewYorkTimesStreams
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(20, TimeUnit.SECONDS);
     }
-
+    /**
+     * Used for Http Request on Article Search API
+     *
+     * @param searchQueryItem
+     *      a list of keywords used for the request
+     * @param beginDate
+     *      begin date filter for request on Most popular API
+     * @param endDate
+     *      end date filter for request on Most popular API
+     * @return
+     *      new observable
+     *      Request on Most popular API
+     */
     public static Observable<MainNewYorkTimesArticleSearch> streamDownloadArticleSearchAPI(List<String> searchQueryItem,
                                                                                            String beginDate,
                                                                                            String endDate)

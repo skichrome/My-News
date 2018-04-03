@@ -7,10 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.skichrome.mynews.R;
-import com.skichrome.mynews.controller.fragments.mainactivityfragments.ArticleSearchRecyclerViewFragment;
-import com.skichrome.mynews.controller.fragments.mainactivityfragments.BaseRecyclerViewFragment;
-import com.skichrome.mynews.controller.fragments.otheractivitiesfragments.NotificationsFragment;
-import com.skichrome.mynews.controller.fragments.otheractivitiesfragments.SearchFragment;
+import com.skichrome.mynews.controller.fragments.recyclerviewfragments.ArticleSearchRecyclerViewFragment;
+import com.skichrome.mynews.controller.fragments.recyclerviewfragments.BaseRecyclerViewFragment;
+import com.skichrome.mynews.controller.fragments.otherfragments.NotificationsFragment;
+import com.skichrome.mynews.controller.fragments.otherfragments.SearchFragment;
 
 import java.util.ArrayList;
 
@@ -19,22 +19,43 @@ import butterknife.ButterKnife;
 
 import static com.skichrome.mynews.controller.activities.MainActivity.ID_OTHERS_ACTIVITIES;
 
+/**
+ * Used as a controller to display notification parameters screen, search screen and article search results fragment
+ */
 public class SearchActivity extends AppCompatActivity implements SearchFragment.OnButtonSearchClickedCallback, BaseRecyclerViewFragment.OnRecyclerViewItemClicked
 {
     //=========================================
     // Fields
     //=========================================
 
+    /**
+     * link to the toolbar of the app
+     */
     @BindView(R.id.activity_toolbar) Toolbar mToolbar;
 
+    /**
+     * The notification screen fragment
+     */
     Fragment notificationsFragment;
+    /**
+     * the search screen fragment
+     */
     Fragment searchFragment;
+    /**
+     * The list of returned article by the api
+     */
     Fragment articleSearchFragment;
 
     //=========================================
     // Base methods
     //=========================================
 
+    /**
+     * Called on each activity launch, here used to configure all visual elements
+     *
+     * @param savedInstanceState
+     *      Used for data restoring (if needed, useless in this case)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -49,12 +70,27 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
 
     }
 
+    /**
+     * Used to get the data from search fragment and launch request by displaying article search results fragment
+     *
+     * @param mQueryList
+     *      contain a list of query search keywords
+     * @param mBeginDate
+     *      contain the begin date for search request
+     * @param mEndDate
+     *      contain the end date for search request
+     */
     @Override
     public void onButtonSearchClicked(ArrayList<String> mQueryList, String mBeginDate, String mEndDate)
     {
         showArticleSearchFragment(mQueryList, mBeginDate, mEndDate);
     }
 
+    /**
+     * Used to show details about one article selected by user
+     * @param url
+     *      contain the article web url
+     */
     @Override
     public void onRVItemClicked(String url)
     {
@@ -63,6 +99,9 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
         startActivity(intent);
     }
 
+    /**
+     * Used to setup the activity toolbar
+     */
     private void configureToolBar ()
     {
         setSupportActionBar(mToolbar);
@@ -74,6 +113,11 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
     // Show fragments Methods
     //=========================================
 
+    /**
+     * Used to show fragment according to an id specific to each fragment
+     * @param idToLaunchFragment
+     *      contain the id of fragment to show
+     */
     private void configureAndShowFragmentById (int idToLaunchFragment)
     {
         switch (idToLaunchFragment)
@@ -91,6 +135,9 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
         }
     }
 
+    /**
+     * configure notification fragment
+     */
     private void showNotificationsFragment()
     {
         if (notificationsFragment == null)
@@ -101,6 +148,9 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
         startTransactionFragment(notificationsFragment);
     }
 
+    /**
+     * configure article search fragment
+     */
     private void showSearchArticleFragment()
     {
         if (searchFragment == null)
@@ -111,6 +161,16 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
         startTransactionFragment(searchFragment);
     }
 
+    /**
+     * configure article search results fragment
+     *
+     * @param mQueryList
+     *      contain a list of query search keywords
+     * @param mBeginDate
+     *      contain the begin date for search request
+     * @param mEndDate
+     *      contain the end date for search request
+     */
     private void showArticleSearchFragment(ArrayList<String> mQueryList, String mBeginDate, String mEndDate)
     {
         if (articleSearchFragment == null)
@@ -128,6 +188,11 @@ public class SearchActivity extends AppCompatActivity implements SearchFragment.
 
     }
 
+    /**
+     * Show fragment passed in parameter
+     * @param mFragment
+     *      the fragment to show if it isn't already visible
+     */
     private void startTransactionFragment(Fragment mFragment)
     {
         if (!mFragment.isVisible())

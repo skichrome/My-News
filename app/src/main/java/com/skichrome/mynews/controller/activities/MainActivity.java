@@ -16,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.skichrome.mynews.R;
-import com.skichrome.mynews.controller.fragments.mainactivityfragments.BaseRecyclerViewFragment;
+import com.skichrome.mynews.controller.fragments.recyclerviewfragments.BaseRecyclerViewFragment;
 import com.skichrome.mynews.view.PageAdapter;
 
 import butterknife.BindView;
@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Fields
     //=========================================
 
+    /**
+     * Used to pass data in intents to other activities
+     */
     public static final String ID_OTHERS_ACTIVITIES = "Details_and_help_activity";
 
     /**
@@ -187,6 +190,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Take care of popping the fragment back stack or finishing the activity as appropriate.
+     */
     @Override
     public void onBackPressed()
     {
@@ -252,15 +258,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         mTabLayout.setupWithViewPager(mViewPager);
-
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
             mTabLayout.setElevation(30);
-            mViewPager.setElevation(5);
-        }
     }
 
     //=========================================
@@ -279,6 +280,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
+    /**
+     * Used to launch search activity with an id in intent used to know which fragment to show in started activity
+     * @param fragId
+     *      contain an id to display asked fragment
+     */
     private void launchSearchActivity(int fragId)
     {
         Intent intent = new Intent(this, SearchActivity.class);
