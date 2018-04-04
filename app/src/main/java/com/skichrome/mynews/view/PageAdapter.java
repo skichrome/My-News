@@ -1,11 +1,11 @@
 package com.skichrome.mynews.view;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.skichrome.mynews.controller.fragments.recyclerviewfragments.MostPopularRecyclerViewFragment;
-import com.skichrome.mynews.controller.fragments.recyclerviewfragments.TopStoriesRecyclerViewFragment;
+import com.skichrome.mynews.controller.fragments.ArticleFragment;
 
 /**
  * This adapter send the correct fragment to display
@@ -32,29 +32,40 @@ public class PageAdapter extends FragmentStatePagerAdapter
     @Override
     public Fragment getItem (int position)
     {
+        //Used as a temp field to assign custom arguments in bundle
+        Fragment articleFragment = ArticleFragment.newInstance();
+
         switch (position)
         {
             case 0 :
-                return TopStoriesRecyclerViewFragment.newInstance("home");
+                articleFragment.setArguments(setBundleArgs("home", 10));
+                break;
 
             case 1 :
-                return MostPopularRecyclerViewFragment.newInstance("all-sections");
+                articleFragment.setArguments(setBundleArgs("all-sections", 20));
+                break;
 
             case 2 :
-                return TopStoriesRecyclerViewFragment.newInstance("technology");
+                articleFragment.setArguments(setBundleArgs("technology", 10));
+                break;
 
             case 3 :
-                return TopStoriesRecyclerViewFragment.newInstance("sports");
+                articleFragment.setArguments(setBundleArgs("sports", 10));
+                break;
 
             case 4 :
-                return TopStoriesRecyclerViewFragment.newInstance("science");
+                articleFragment.setArguments(setBundleArgs("science", 10));
+                break;
 
             case 5 :
-                return TopStoriesRecyclerViewFragment.newInstance("automobiles");
+                articleFragment.setArguments(setBundleArgs("automobiles", 10));
+                break;
 
             default:
-                return TopStoriesRecyclerViewFragment.newInstance("home");
+                articleFragment.setArguments(setBundleArgs("home", 10));
         }
+
+        return articleFragment;
     }
 
     /**
@@ -101,5 +112,14 @@ public class PageAdapter extends FragmentStatePagerAdapter
             default:
                 return "Page " + position;
         }
+    }
+
+    private Bundle setBundleArgs(String mSection, int mRequestId)
+    {
+        Bundle bundle = new Bundle();
+        bundle.putString("SECTION", mSection);
+        bundle.putInt("REQUEST_ID", mRequestId);
+
+        return bundle;
     }
 }

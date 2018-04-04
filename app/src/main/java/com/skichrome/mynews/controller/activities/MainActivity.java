@@ -9,32 +9,25 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.skichrome.mynews.R;
-import com.skichrome.mynews.controller.fragments.recyclerviewfragments.BaseRecyclerViewFragment;
+import com.skichrome.mynews.controller.fragments.ArticleFragment;
 import com.skichrome.mynews.view.PageAdapter;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * The main activity is used as a controller to display different fragments in a viewPager, a navigation drawer, a toolBar and a tabLayout
  */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, BaseRecyclerViewFragment.OnRecyclerViewItemClicked
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, ArticleFragment.OnRecyclerViewItemClicked
 {
     //=========================================
     // Fields
     //=========================================
-
-    /**
-     * Used to pass data in intents to other activities
-     */
-    public static final String ID_OTHERS_ACTIVITIES = "Details_and_help_activity";
 
     /**
      * Contains the toolBar of the app
@@ -58,28 +51,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @BindView(R.id.activity_main_view_pager) ViewPager mViewPager;
 
     //=========================================
-    // Overrided Methods
+    // SuperClass Methods
     //=========================================
 
     /**
-     * Called on each activity launch, here used to configure all visual elements
-     *
-     * @param savedInstanceState
-     *      Used for data restoring (if needed, useless in this case)
+     * @see BaseActivity#configureDesign()
      */
     @Override
-    protected void onCreate (Bundle savedInstanceState)
+    protected void configureDesign()
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        ButterKnife.bind(this);
-
-        configureToolBar();
-        configureMenuDrawer();
-        configureNavigationView();
-        configureViewPagerAndTabs();
+        this.configureToolBar();
+        this.configureMenuDrawer();
+        this.configureNavigationView();
+        this.configureViewPagerAndTabs();
     }
+
+    /**
+     * @see BaseActivity#updateDesign()
+     */
+    @Override
+    protected void updateDesign()
+    {
+    }
+
+    /**
+     * @see BaseActivity#getActivityLayout()
+     * @return
+     *      integer, id of layout
+     */
+    @Override
+    protected int getActivityLayout()
+    {
+        return R.layout.activity_main;
+    }
+
+    //=========================================
+    // ToolBar Menu Methods
+    //=========================================
 
     /**
      * Get the layout menu and inflate the menu in toolBar
@@ -121,25 +129,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId())
         {
             case R.id.activity_main_menu_search :
-                launchSearchActivity(0);
+                launchNotificationsAndSearchActivity(0);
                 return true;
 
             case R.id.activity_main_menu_notifications :
-                launchSearchActivity(1);
+                launchNotificationsAndSearchActivity(1);
                 return true;
 
             case R.id.activity_main_menu_help :
-                launchDetailsAndHelpActivity("help");
+                launchHelpAndAboutActivity("help");
                 return true;
 
             case R.id.activity_main_menu_about :
-                launchDetailsAndHelpActivity("about");
+                launchHelpAndAboutActivity("about");
                 return true;
 
             default :
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    //=========================================
+    // Navigation Drawer Menu Methods
+    //=========================================
 
     /**
      * Called when an item in the navigation menu is selected.
@@ -155,31 +167,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId())
         {
             case R.id.activity_main_menu_drawer_search :
-                launchSearchActivity(0);
+                launchNotificationsAndSearchActivity(0);
                 break;
 
             case R.id.activity_main_menu_drawer_top_stories :
-                changeToMostPopularFragmentInViewPager(0);
+                changeFragmentInViewPager(0);
                 break;
 
             case R.id.activity_main_menu_drawer_most_popular :
-                changeToMostPopularFragmentInViewPager(1);
+                changeFragmentInViewPager(1);
                 break;
 
             case R.id.activity_main_menu_drawer_new_tech :
-                changeToMostPopularFragmentInViewPager(2);
+                changeFragmentInViewPager(2);
                 break;
 
             case R.id.activity_main_menu_drawer_notifications :
-                launchSearchActivity(1);
+                launchNotificationsAndSearchActivity(1);
                 break;
 
             case R.id.activity_main_menu_drawer_help :
-                launchDetailsAndHelpActivity("help");
+                launchHelpAndAboutActivity("help");
                 break;
 
             case R.id.activity_main_menu_drawer_about :
-                launchDetailsAndHelpActivity("about");
+                launchHelpAndAboutActivity("about");
                 break;
 
             default :
@@ -202,6 +214,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
     }
 
+    //=========================================
+    // Callback Method
+    //=========================================
 
     /**
      * Used to launch details activity that can display an article in WebView
@@ -211,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onRVItemClicked(String url)
     {
-        launchDetailsAndHelpActivity(url);
+        launchArticleDetailsActivity(url);
     }
 
     //=========================================
@@ -273,32 +288,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param mUrlId
      *      the id that will pe passed to the intent
      */
-    private void launchDetailsAndHelpActivity( String mUrlId)
+    private void launchArticleDetailsActivity(String mUrlId)
     {
-        Intent intent = new Intent(this, DetailsAndHelpActivity.class);
+        Intent intent = new Intent(this, ArticleDetailsActivity.class);
         intent.putExtra(ID_OTHERS_ACTIVITIES, mUrlId);
         startActivity(intent);
     }
 
     /**
      * Used to launch search activity with an id in intent used to know which fragment to show in started activity
-     * @param fragId
+     * @param mFragId
      *      contain an id to display asked fragment
      */
-    private void launchSearchActivity(int fragId)
+    private void launchNotificationsAndSearchActivity(int mFragId)
     {
-        Intent intent = new Intent(this, SearchActivity.class);
-        intent.putExtra(ID_OTHERS_ACTIVITIES, fragId);
+        Intent intent = new Intent(this, NotificationAndSearchActivity.class);
+        intent.putExtra(ID_OTHERS_ACTIVITIES, mFragId);
         startActivity(intent);
+    }
+
+    private void launchHelpAndAboutActivity(String mFragId)
+    {
+        //feature not implemented yet
+        Toast.makeText(this, "This feature was not implemented yet ;)", Toast.LENGTH_SHORT).show();
     }
 
     /**
      * This method allow changing current viewPager fragment with id in parameters( {@link #onNavigationItemSelected(MenuItem)})
-     * @param fragId
+     * @param mFragId
      *      the fragment id
      */
-    private void changeToMostPopularFragmentInViewPager(int fragId)
+    private void changeFragmentInViewPager(int mFragId)
     {
-        mViewPager.setCurrentItem(fragId);
+        mViewPager.setCurrentItem(mFragId);
     }
 }

@@ -39,7 +39,7 @@ public class TopStoriesRecyclerViewTest
         //create a new testObserver
         TestObserver<MainNewYorkTimesTopStories> testObserver = new TestObserver<>();
 
-        //launch observable and check ther is no errors
+        //launch observable and check there is no errors
         observable.subscribeWith(testObserver)
                 .assertNoErrors()
                 .assertNoTimeout()

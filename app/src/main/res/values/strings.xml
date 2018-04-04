@@ -23,7 +23,7 @@
     <string name="activity_main_menu_drawer_title_search">Search</string>
     <string name="new_york_times_logo_nav_drawer_header">New York Times Logo</string>
 
-    <!-- Used In SearchActivity and linked fragments -->
+    <!-- Used In NotificationAndSearchActivity and linked fragments -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="fragment_base_search_search_field">Search query items</string>
     <string name="fragment_base_search_politics">Politics</string>
