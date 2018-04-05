@@ -1,4 +1,4 @@
-package com.skichrome.mynews.Utils;
+package com.skichrome.mynews.utils;
 
 import com.skichrome.mynews.model.articlesearchapi.MainNewYorkTimesArticleSearch;
 import com.skichrome.mynews.model.mostpopularapimostviewed.MainNewYorkTimesMostPopular;

@@ -1,11 +1,11 @@
 package com.skichrome.mynews;
 
-import com.skichrome.mynews.Utils.Date;
+import com.skichrome.mynews.utils.Date;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class DateUnitTest
 {
@@ -13,7 +13,7 @@ public class DateUnitTest
     private String cuttedString;
 
     @Before
-    public void setUp() throws Exception
+    public void setUp()
     {
         //This string represent the raw date format returned by the NewYorkTimes API in each articles
         String RAW_STRING = "2018-03-20T05:37:56-04:00";
@@ -29,25 +29,25 @@ public class DateUnitTest
     }
 
     @Test
-    public void shouldReturnCorrectDateLengthIfEntryDateIsTooLong() throws Exception
+    public void shouldReturnCorrectDateLengthIfEntryDateIsTooLong()
     {
         assertEquals("2018-03-20", cuttedString);
     }
 
     @Test
-    public void shouldReturnYearWithDateFormattedString() throws Exception
+    public void shouldReturnYearWithDateFormattedString()
     {
         assertEquals("2018", date.getYear());
     }
 
     @Test
-    public void shouldReturnMonthWithDateFormattedString() throws Exception
+    public void shouldReturnMonthWithDateFormattedString()
     {
         assertEquals("03", date.getMonth());
     }
 
     @Test
-    public void shouldReturnDayOfMonthWithDateFormattedString() throws Exception
+    public void shouldReturnDayOfMonthWithDateFormattedString()
     {
         assertEquals("20", date.getDayOfMonth());
     }

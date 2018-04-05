@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.RequestManager;
 import com.skichrome.mynews.R;
-import com.skichrome.mynews.Utils.ArticleSampleForAPIConverter;
+import com.skichrome.mynews.utils.ArticleSampleForAPIConverter;
 
 import java.util.List;
 

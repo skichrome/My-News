@@ -1,4 +1,4 @@
-package com.skichrome.mynews.Utils;
+package com.skichrome.mynews.utils;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

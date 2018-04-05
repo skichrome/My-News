@@ -3,9 +3,9 @@ package com.skichrome.mynews;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.skichrome.mynews.Utils.NewYorkTimesStreams;
 import com.skichrome.mynews.controller.activities.MainActivity;
 import com.skichrome.mynews.model.topstoriesapi.MainNewYorkTimesTopStories;
+import com.skichrome.mynews.utils.NewYorkTimesStreams;
 
 import org.junit.Rule;
 import org.junit.Test;

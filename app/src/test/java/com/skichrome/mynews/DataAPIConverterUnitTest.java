@@ -1,12 +1,12 @@
 package com.skichrome.mynews;
 
-import com.skichrome.mynews.Utils.ArticleSampleForAPIConverter;
-import com.skichrome.mynews.Utils.DataAPIConverter;
 import com.skichrome.mynews.model.articlesearchapi.Doc;
 import com.skichrome.mynews.model.articlesearchapi.Headline;
 import com.skichrome.mynews.model.articlesearchapi.MainNewYorkTimesArticleSearch;
 import com.skichrome.mynews.model.articlesearchapi.Multimedium;
 import com.skichrome.mynews.model.articlesearchapi.Response;
+import com.skichrome.mynews.utils.ArticleSampleForAPIConverter;
+import com.skichrome.mynews.utils.DataAPIConverter;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -66,7 +66,7 @@ public class DataAPIConverterUnitTest
     }
 
     @Test
-    public void souldReturnAllFieldsNeededInArticleSearch() throws Exception
+    public void souldReturnAllFieldsNeededInArticleSearch()
     {
         for (ArticleSampleForAPIConverter article : convertedArticles)
         {

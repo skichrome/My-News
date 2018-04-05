@@ -2,6 +2,7 @@ package com.skichrome.mynews.controller.fragments;
 
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,12 +20,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skichrome.mynews.R;
+import com.skichrome.mynews.utils.androidjob.ShowNotificationJob;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Fragment for notification and article search api screens
@@ -116,7 +120,7 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     /**
      * Used to detect if user has typed at least one keyword before clicking on button
      */
-    private boolean btnState =false;
+    private boolean editTextState = false;
     /**
      * Used for callback to activities
      */
@@ -131,10 +135,24 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
      */
     private ArrayList<String> finalStringList = new ArrayList<>();
 
+    /**
+     * Used to store and restore options and keywords typed by user on notification screen
+     */
+    private SharedPreferences searchParameters;
+    /**
+     * Used to identify job task, and cancel id when needed
+     */
+    private int jobId;
+
     //=====================
     // newInstance Method
     //=====================
 
+    /**
+     * Used each time we have to create this fragment to display it
+     *
+     * @return new instance of this fragment
+     */
     public static Fragment newInstance()
     {
         return new SearchAndNotificationFragment();
@@ -144,9 +162,14 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     // Superclass Methods
     //=====================
 
+    /**
+     * @see BaseFragment#configureDesign()
+     */
     @Override
     protected void configureDesign()
     {
+        searchParameters = getContext().getSharedPreferences("searchParameters", MODE_PRIVATE);
+
         this.checkBoxes1ist = this.createCheckBoxesList();
         this.getDataFromBundle();
         this.removeUselessEntryFields();
@@ -154,6 +177,9 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
         this.setTextEntryListenerForButtonActivation();
     }
 
+    /**
+     * @see BaseFragment#updateDesign()
+     */
     @Override
     protected void updateDesign()
     {
@@ -185,16 +211,42 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     @Override
     public void onClick(View v)
     {
-        //Setup the notifications to On or Off
-
+        //Setup the notifications to On or Off for notification screen
+        if (v == mSwitch)
+        {
+            if (mSwitch.isChecked())
+            {
+                boolean checkBoxesState = checkIfUserHaveSelectedAtLeastOneCheckBox();
+                //ensure that user have typed one keyword and checked one checkbox
+                if (editTextState && checkBoxesState)
+                {
+                    //get the user request keywords
+                    this.getDataFromEntryFields();
+                    this.storeDataInSharedPreferences();
+                    //start job
+                    this.jobId = ShowNotificationJob.schedulePeriodicJob();
+                    Log.e("-----JOB_STATUS-----", "onClick: job activated");
+                }
+                else
+                {
+                    mSwitch.setChecked(false);
+                    Toast.makeText(getContext(), "You must select one category and type one word", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else
+            {
+                ShowNotificationJob.cancelJob(jobId);
+                Log.e("-----JOB_STATUS-----", "onClick: job disabled");
+            }
+        }
 
         // get data from entry fields here if user click on button, if he clicked on button, other "if" will not be executed
         if (v == mBtn)
         {
             //Used to detect if user has checked at least one checkbox before clicking on button
-            Boolean checkBoxesState = checkIfUserHaveSelectedAtLeastOneCheckBox();
+            boolean checkBoxesState = checkIfUserHaveSelectedAtLeastOneCheckBox();
             //ensure that user have typed one keyword and checked one checkbox
-            if (btnState && checkBoxesState)
+            if (editTextState && checkBoxesState)
                 this.getDataFromEntryFields();
             else
                 Toast.makeText(getContext(), "You must select one category and type one word", Toast.LENGTH_SHORT).show();
@@ -240,6 +292,18 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     }
 
     /**
+     * Store data with sharedPreferences, used to restore screen state, and execute in planified task http request
+     */
+    private void storeDataInSharedPreferences()
+    {
+        for (String finalString : finalStringList)
+            searchParameters.edit().putString("PREF_KEY_SEARCH_KEYWORDS_" + finalStringList.indexOf(finalString), finalString).apply();
+
+        searchParameters.edit().putInt("SIZE_OF_LIST_KEYWORDS", finalStringList.size()).apply();
+        searchParameters.edit().putBoolean("SWITCH_STATE", mSwitch.isChecked()).apply();
+    }
+
+    /**
      * Check if user has checked at least one checkbox, and set the button color if true; he's not allowed to launch request without any checkbox selected
      * @return
      *      boolean, true if a checked checkbox is detected, else return false
@@ -275,11 +339,33 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
         return checkBoxes;
     }
 
+    /**
+     * Get the data passed in bundle and set up fields on screen if data is stored in sharedPreferences
+     */
     private void getDataFromBundle()
     {
         Bundle bundle = getArguments();
         if (bundle != null)
             this.screenId = bundle.getInt("ID_SEARCH_NOTIFICATION_FRAG");
+
+        //set the switch to activated if a job is already started
+        this.mSwitch.setChecked(searchParameters.getBoolean("SWITCH_STATE", false));
+
+        //get the size of arrayList stored in sharedPreferences for for loop
+        int arrayListSize = searchParameters.getInt("SIZE_OF_LIST_KEYWORDS", 0);
+        //set the editText content with the first item of list
+        mEditTextKeyWords.setText(searchParameters.getString("PREF_KEY_SEARCH_KEYWORDS_0", ""));
+        //check if words stored match with checkboxes titles, if match set checkbox state to checked
+        for (int i = 0; i < arrayListSize; i++)
+        {
+            for (CheckBox checkBox : checkBoxes1ist)
+            {
+                String wordToCompare = searchParameters.getString("PREF_KEY_SEARCH_KEYWORDS_" + i, null);
+
+                if (wordToCompare.equals(checkBox.getText().toString()))
+                    checkBox.setChecked(true);
+            }
+        }
     }
 
     /**
@@ -334,7 +420,7 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
                 //set the boolean to true if something is present in the editText field, else set to false
-                btnState = s.toString().length() != 0;
+                editTextState = s.toString().length() != 0;
             }
 
             @Override
@@ -354,14 +440,15 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
      */
     private void getDataFromEntryFields()
     {
+        //get the editText content as the first field of list (usefull to restore state of screen with sharedPreferences
+        finalStringList.add(mEditTextKeyWords.getText().toString());
+
         //get the common fields data content
         for (CheckBox checkBox : checkBoxes1ist)
         {
             if (String.valueOf(checkBox.isChecked()).equals("true"))
                 finalStringList.add(checkBox.getText().toString());
         }
-
-        finalStringList.add(mEditTextKeyWords.getText().toString());
 
         //get each specific fields
         switch (screenId)
@@ -374,8 +461,7 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
                 mCallback.onButtonSearchClicked(finalStringList, beginDate, endDate);
                 break;
 
-            case 1 :
-                //For notification screen
+            default:
                 break;
         }
     }

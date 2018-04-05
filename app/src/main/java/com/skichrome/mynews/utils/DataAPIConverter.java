@@ -1,7 +1,7 @@
-package com.skichrome.mynews.Utils;
+package com.skichrome.mynews.utils;
 
-import com.skichrome.mynews.model.topstoriesapi.*;
-import com.skichrome.mynews.model.articlesearchapi.*;
+import com.skichrome.mynews.model.articlesearchapi.Doc;
+import com.skichrome.mynews.model.topstoriesapi.Result;
 
 import java.util.ArrayList;
 import java.util.List;

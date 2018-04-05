@@ -1,6 +1,5 @@
 package com.skichrome.mynews.controller.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,13 +13,13 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.skichrome.mynews.R;
-import com.skichrome.mynews.Utils.ArticleSampleForAPIConverter;
-import com.skichrome.mynews.Utils.DataAPIConverter;
-import com.skichrome.mynews.Utils.ItemClickSupportOnRecyclerView;
-import com.skichrome.mynews.Utils.NewYorkTimesStreams;
 import com.skichrome.mynews.model.articlesearchapi.MainNewYorkTimesArticleSearch;
 import com.skichrome.mynews.model.mostpopularapimostviewed.MainNewYorkTimesMostPopular;
 import com.skichrome.mynews.model.topstoriesapi.MainNewYorkTimesTopStories;
+import com.skichrome.mynews.utils.ArticleSampleForAPIConverter;
+import com.skichrome.mynews.utils.DataAPIConverter;
+import com.skichrome.mynews.utils.ItemClickSupportOnRecyclerView;
+import com.skichrome.mynews.utils.NewYorkTimesStreams;
 import com.skichrome.mynews.view.GenericRVAdapter;
 
 import java.util.ArrayList;
@@ -106,16 +105,8 @@ public class ArticleFragment extends BaseFragment
     private int requestId;
 
     //=========================
-    // Empty Constructor
+    // newInstance Method
     //=========================
-
-    /**
-     * Empty constructor, needed for Fragment instantiation, not modifiable
-     */
-    public ArticleFragment()
-    {
-        // Required empty public constructor
-    }
 
     /**
      * Used each time we have to create this fragment to display it
@@ -139,6 +130,7 @@ public class ArticleFragment extends BaseFragment
     {
         this.configureRecyclerView();
         this.configureOnClickRecyclerView();
+        this.getRequestId();
         this.executeHttpRequest();
     }
 
@@ -244,7 +236,7 @@ public class ArticleFragment extends BaseFragment
     private void updateListResults (List<ArticleSampleForAPIConverter> mResultsList)
     {
         if (mResultsList.size() == 0)
-            showAlertNoArticleFound();
+            this.showAlertNoArticleFound();
 
         swipeRefreshLayout.setRefreshing(false);
         this.resultList.clear();
@@ -254,19 +246,25 @@ public class ArticleFragment extends BaseFragment
     }
 
     /**
+     * Get common parameters stored in bundle, before executing Http request
+     */
+    private void getRequestId()
+    {
+        Bundle bundle = getArguments();
+        if (bundle != null)
+            this.requestId = bundle.getInt("REQUEST_ID");
+    }
+
+    /**
      * Get the parameters stored in bundle, to launch specific api request
      */
     private void getSearchParameters()
     {
         this.queryList = new ArrayList<>();
-
         Bundle bundle = getArguments();
 
         if (bundle != null)
-        {
             this.section = bundle.getString("SECTION");
-            this.requestId = bundle.getInt("REQUEST_ID");
-        }
     }
 
     /**
@@ -275,13 +273,10 @@ public class ArticleFragment extends BaseFragment
     private void getSearchParametersForArticleSearch()
     {
         this.queryList = new ArrayList<>();
-
         Bundle bundle = getArguments();
 
         if (bundle != null)
         {
-            this.requestId = bundle.getInt("REQUEST_ID");
-
             this.queryList.addAll(bundle.getStringArrayList("SEARCH_DATA_LIST"));
             this.beginDate = bundle.getString("SEARCH_DATA_BEGIN_DATE", null);
             this.endDate = bundle.getString("SEARCH_DATA_END_DATE", null);
@@ -300,7 +295,6 @@ public class ArticleFragment extends BaseFragment
                 break;
 
             case 20 :
-                Log.d("---------Trace---------", "<:----------:> ");
                 getMostPopularResultsOnAPI();
                 break;
 
@@ -497,7 +491,7 @@ public class ArticleFragment extends BaseFragment
      */
     private void showAlertNoArticleFound()
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Bad news...");
         builder.setMessage("Your request didn't return anything...");
         builder.setPositiveButton("Go back", new DialogInterface.OnClickListener()
@@ -505,10 +499,10 @@ public class ArticleFragment extends BaseFragment
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
-                Activity activity = getActivity();
-                if (activity != null)
-                    activity.finish();
+                dialog.dismiss();
             }
         });
+        builder.create();
+        builder.show();
     }
 }

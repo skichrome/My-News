@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 import com.skichrome.mynews.R;
-import com.skichrome.mynews.Utils.ArticleSampleForAPIConverter;
+import com.skichrome.mynews.utils.ArticleSampleForAPIConverter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
