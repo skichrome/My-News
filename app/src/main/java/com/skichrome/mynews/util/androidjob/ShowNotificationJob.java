@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -29,13 +30,41 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
+/**
+ * this class is dedicated to Android Job library methods
+ * <p>
+ * Here we create a new Job, there is one method to start Job and one to stop it, when run the job the app make a request on ArticleSearch API and
+ * check if articles are returned with keywords in sharedPreferences, if articles are available, we display a notification, that allow user to go to the app
+ * </p>
+ */
 public class ShowNotificationJob extends Job
 {
+    /**
+     * Contain the tag for the job identification
+     */
     public static final String TAG = "notification_job_tag";
+    /**
+     * contain the id for channel used for notification (needed on Android API 26 and above)
+     */
     private static final String CHANNEL_ID = "channel_id";
+    /**
+     * Contain the list of query keywords used to launch ArticleSearch api request
+     */
     private ArrayList<String> searchKeywordsList;
+    /**
+     * Used to convert the API result in a usable format in recyclerView
+     */
     private ArticleNYTConverter articleNYTConverter = new ArticleNYTConverter();
 
+    /**
+     * Create and launch a new job with specific id
+     * <p>
+     * the job is periodic (once a day), require network to be executed,
+     * if a second job is created he replace the first created job.
+     * </p>
+     *
+     * @return integer, id of the job created
+     */
     public static int schedulePeriodicJob()
     {
         return new JobRequest.Builder(ShowNotificationJob.TAG)
@@ -46,11 +75,37 @@ public class ShowNotificationJob extends Job
                 .schedule();
     }
 
+    /**
+     * Used to cancel a job (with switch in the app)
+     * @param jobId
+     *      the id of job to cancel
+     */
     public static void cancelJob(int jobId)
     {
         JobManager.instance().cancel(jobId);
     }
 
+    /**
+     * This method is invoked from a background thread. You should run your desired task here.
+     * This method is thread safe. Each time a job starts executing a new instance of your {@link Job}
+     * is instantiated. You can identify your {@link Job} with the passed {@code params}.
+     *
+     * <br>
+     * <br>
+     *
+     * You should call {@link #isCanceled()} frequently for long running jobs and stop your
+     * task if necessary.
+     *
+     * <br>
+     * <br>
+     *
+     * A {@link PowerManager.WakeLock} is acquired for 3 minutes for each {@link Job}. If your task
+     * needs more time, then you need to create an extra {@link PowerManager.WakeLock}.
+     *
+     * @param params The parameters for this concrete job.
+     * @return The result of this {@link Job}. Note that returning {@link Result#RESCHEDULE} for a periodic
+     * {@link Job} is invalid and ignored.
+     */
     @NonNull
     @Override
     protected Result onRunJob(@NonNull Params params)
@@ -136,27 +191,41 @@ public class ShowNotificationJob extends Job
             configureNotification();
     }
 
+    /**
+     * Used to configure a system notification
+     * <p>
+     *     The notification is configured to launch an activity when user click on it, on click
+     *     the notification is automatically canceled
+     * </p>
+     * <p>
+     *     To support recent Android versions (API 26+) we need to set a notification channel for these
+     *     versions, and attach it to the notification manager
+     * </p>
+     */
     private void configureNotification()
     {
+        //used to launch activity on user click
         Intent intent = new Intent(getContext(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, intent, 0);
 
+        //create the notification with title, message and icon
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
-                .setSmallIcon(R.drawable.default_newspaper)
+                .setSmallIcon(R.mipmap.ic_app_icon)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setContentTitle("Real Time Alert")
                 .setContentText("New articles available !")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
+        //for recent Android versions... create a notification channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
             CharSequence name = getContext().getString(R.string.channel_name);
             String description = getContext().getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_HIGH;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
 
@@ -167,6 +236,7 @@ public class ShowNotificationJob extends Job
             // notificationId is a unique int for each notification that you must define
             notificationManager.notify(10, mBuilder.build());
         }
+        //default notification for older Android versions
         else
         {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());

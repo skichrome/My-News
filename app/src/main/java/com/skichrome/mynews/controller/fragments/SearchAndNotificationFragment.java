@@ -36,15 +36,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class SearchAndNotificationFragment extends BaseFragment implements View.OnClickListener
 {
     //=========================
-    // Callback interface
-    //=========================
-
-    /**
-     * Used to detect if user has typed at least one keyword before clicking on button
-     */
-    private boolean editTextState;
-
-    //=========================
     // Fields
     //=========================
 
@@ -131,6 +122,10 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
      * Used to identify job task, and cancel id when needed
      */
     private int jobId;
+    /**
+     * Used to detect if user has typed at least one keyword before clicking on button
+     */
+    private boolean editTextState;
 
     /**
      * Used each time we have to create this fragment to display it
@@ -168,12 +163,15 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
                 {
                     //get the user request keywords
                     this.getDataFromEntryFields();
-                    this.storeDataInSharedPreferences();
+
                     //start job
                     this.jobId = ShowNotificationJob.schedulePeriodicJob();
+
+                    //memorise status of job
                     this.stateJob = true;
-                    searchParameters.edit().putBoolean("STATE_JOB", stateJob).apply();
                     Log.e("-----JOB_STATUS-----", "onClick: job activated");
+
+                    this.storeDataInSharedPreferences();
                 }
                 else
                 {
@@ -183,9 +181,15 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
             }
             else
             {
+                //cancel job
                 ShowNotificationJob.cancelJob(jobId);
+                //save the status of job
                 this.stateJob = false;
+                //delete all things saved in sharedPreferences, because if notifications are disabled we don't want to save fields
+                searchParameters.edit().clear().apply();
+                //re-insert the state of stateJob in case of re-lauching the app
                 searchParameters.edit().putBoolean("STATE_JOB", stateJob).apply();
+
                 Log.e("-----JOB_STATUS-----", "onClick: job disabled");
             }
         }
@@ -195,7 +199,8 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
         {
             //Used to detect if user has checked at least one checkbox before clicking on button
             boolean checkBoxesState = checkIfUserHaveSelectedAtLeastOneCheckBox();
-            //ensure that user have typed one keyword and checked one checkbox
+
+            //ensure that user have typed one keyword and checked one checkbox, else show a Toast alert
             if (editTextState && checkBoxesState)
                 this.getDataFromEntryFields();
             else
@@ -219,14 +224,17 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
                     String dayString = dayOfMonth + "";
                     String monthString = (month + 1) + "";
 
+                    //convert the date in usable String format
                     if (monthString.length() == 1)
                         monthString = "0" + (month + 1);
                     if (dayString.length() == 1)
                         dayString = "0" + dayOfMonth;
 
+                    //put date in sharedPreferences in readable format for ArticleSearch API
                     String dateString = year + monthString + dayString;
                     searchParameters.edit().putString("BEGIN_DATE", dateString).apply();
 
+                    //display the selected date in field on screen
                     dateString = dayString + "/" + monthString + "/" + year;
                     mTextViewBeginDate.setText(dateString);
                 }
@@ -244,14 +252,17 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
                     String dayString = dayOfMonth + "";
                     String monthString = (month + 1) + "";
 
+                    //convert the date in usable String format
                     if (monthString.length() == 1)
                         monthString = "0" + (month + 1);
                     if (dayString.length() == 1)
                         dayString = "0" + dayOfMonth;
 
+                    //put date in sharedPreferences in readable format for ArticleSearch API
                     String dateString = year + monthString + dayString;
                     searchParameters.edit().putString("END_DATE", dateString).apply();
 
+                    //display the selected date in field on screen
                     dateString = dayString + "/" + monthString + "/" + year;
                     mTextViewEndDate.setText(dateString);
                 }
@@ -271,8 +282,6 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     @Override
     protected void configureDesign()
     {
-        searchParameters = getContext().getSharedPreferences("searchParameters", MODE_PRIVATE);
-
         this.checkBoxes1ist = this.createCheckBoxesList();
         this.getDataFromBundle();
         this.removeUselessEntryFields();
@@ -308,10 +317,18 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
      */
     private void storeDataInSharedPreferences()
     {
+        //store the size of the list (used to restore the list)
         searchParameters.edit().putInt("SIZE_OF_LIST_KEYWORDS", finalStringList.size()).apply();
 
+        //store all items stored in the list with unique id for each items
         for (String finalString : finalStringList)
             searchParameters.edit().putString("PREF_KEY_SEARCH_KEYWORDS_" + finalStringList.indexOf(finalString), finalString).apply();
+
+        //store id of running job
+        searchParameters.edit().putInt("ID_OF_JOB", jobId).apply();
+
+        //store the job status
+        searchParameters.edit().putBoolean("STATE_JOB", stateJob).apply();
     }
 
     /**
@@ -334,6 +351,10 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
      */
     private void getDataFromBundle()
     {
+        //get sharedPreferences
+        searchParameters = getContext().getSharedPreferences("searchParameters", MODE_PRIVATE);
+
+        //get bundle to get id of screen to display
         Bundle bundle = getArguments();
         if (bundle != null)
             this.screenId = bundle.getInt("ID_SEARCH_NOTIFICATION_FRAG");
@@ -342,11 +363,15 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
         this.stateJob = searchParameters.getBoolean("STATE_JOB", false);
         this.mSwitch.setChecked(stateJob);
 
+        //set the jobId if a job is already created and the app has been completely closed
+        jobId = searchParameters.getInt("ID_OF_JOB", 0);
+
         //get the size of arrayList stored in sharedPreferences for for loop
         int arrayListSize = searchParameters.getInt("SIZE_OF_LIST_KEYWORDS", 0);
-        //set the editText content with the first item of list
 
+        //set the editText content with the first item of list
         mEditTextKeyWords.setText(searchParameters.getString("PREF_KEY_SEARCH_KEYWORDS_0", ""));
+
         //check if words stored match with checkboxes titles, if match set checkbox state to checked
         for (int i = 0; i < arrayListSize; i++)
         {
@@ -434,7 +459,7 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
                 finalStringList.add(checkBox.getText().toString());
         }
 
-        //get each specific fields
+        //create callback only for search screen
         switch (screenId)
         {
             case 0:
@@ -492,7 +517,7 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     }
 
     //==========================================
-    // Callback Method
+    // Callback Interface
     //==========================================
 
     /**
