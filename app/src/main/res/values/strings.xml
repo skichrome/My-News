@@ -37,4 +37,8 @@
     <string name="fragment_base_search_notifications_switch">Enable notifications (once per day)</string>
     <string name="fragment_base_search_search_btn_text">Search</string>
     <string name="date_format">DD/MM/YYYY</string>
+
+    <!-- Used in notification service -->
+    <string name="channel_name">News alert</string>
+    <string name="channel_description">Notify you when articles based on your research keywords are available, once a day</string>
 </resources>

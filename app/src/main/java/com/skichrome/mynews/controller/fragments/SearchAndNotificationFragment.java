@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.skichrome.mynews.R;
-import com.skichrome.mynews.utils.androidjob.ShowNotificationJob;
+import com.skichrome.mynews.util.androidjob.ShowNotificationJob;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,21 +40,9 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     //=========================
 
     /**
-     * Used for callback to activities
+     * Used to detect if user has typed at least one keyword before clicking on button
      */
-    public interface OnButtonSearchClickedCallback
-    {
-        /**
-         * Used when user click on search button
-         * @param mQueryList
-         *      contain a list of query search keywords
-         * @param mBeginDate
-         *      contain the begin date for search request
-         * @param mEndDate
-         *      contain the end date for search request
-         */
-        void onButtonSearchClicked(ArrayList<String> mQueryList, String mBeginDate, String mEndDate);
-    }
+    private boolean editTextState;
 
     //=========================
     // Fields
@@ -118,9 +106,9 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
      */
     private int screenId;
     /**
-     * Used to detect if user has typed at least one keyword before clicking on button
+     * Used to know if the job is launched or not, to update the switch according to this field
      */
-    private boolean editTextState = false;
+    private boolean stateJob;
     /**
      * Used for callback to activities
      */
@@ -144,10 +132,6 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
      */
     private int jobId;
 
-    //=====================
-    // newInstance Method
-    //=====================
-
     /**
      * Used each time we have to create this fragment to display it
      *
@@ -156,6 +140,125 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     public static Fragment newInstance()
     {
         return new SearchAndNotificationFragment();
+    }
+
+    //=====================
+    // newInstance Method
+    //=====================
+
+    /**
+     * Used to set the date fields by creating a DateNYTConverter Picker to allow user to select a date,also used to get user data
+     * on search button by calling {@link SearchAndNotificationFragment#getDataFromEntryFields()} method.
+     * Finally used to set the notifications to On or Off
+     *
+     * @param v
+     *         The view clicked by the user
+     */
+    @Override
+    public void onClick(View v)
+    {
+        //Setup the notifications to On or Off for notification screen
+        if (v == mSwitch)
+        {
+            if (mSwitch.isChecked())
+            {
+                boolean checkBoxesState = checkIfUserHaveSelectedAtLeastOneCheckBox();
+                //ensure that user have typed one keyword and checked one checkbox
+                if (editTextState && checkBoxesState)
+                {
+                    //get the user request keywords
+                    this.getDataFromEntryFields();
+                    this.storeDataInSharedPreferences();
+                    //start job
+                    this.jobId = ShowNotificationJob.schedulePeriodicJob();
+                    this.stateJob = true;
+                    searchParameters.edit().putBoolean("STATE_JOB", stateJob).apply();
+                    Log.e("-----JOB_STATUS-----", "onClick: job activated");
+                }
+                else
+                {
+                    mSwitch.setChecked(false);
+                    Toast.makeText(getContext(), "You must select one category and type one word", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else
+            {
+                ShowNotificationJob.cancelJob(jobId);
+                this.stateJob = false;
+                searchParameters.edit().putBoolean("STATE_JOB", stateJob).apply();
+                Log.e("-----JOB_STATUS-----", "onClick: job disabled");
+            }
+        }
+
+        // get data from entry fields here if user click on button, if he clicked on button, other "if" will not be executed
+        if (v == mBtn)
+        {
+            //Used to detect if user has checked at least one checkbox before clicking on button
+            boolean checkBoxesState = checkIfUserHaveSelectedAtLeastOneCheckBox();
+            //ensure that user have typed one keyword and checked one checkbox
+            if (editTextState && checkBoxesState)
+                this.getDataFromEntryFields();
+            else
+                Toast.makeText(getContext(), "You must select one category and type one word", Toast.LENGTH_SHORT).show();
+        }
+
+        //Get a calendar instance
+        final Calendar myCalendar = Calendar.getInstance();
+
+        int year = myCalendar.get(Calendar.YEAR);
+        int month = myCalendar.get(Calendar.MONTH);
+        int day = myCalendar.get(Calendar.DAY_OF_MONTH);
+
+        if (v == mTextViewBeginDate)
+        {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener()
+            {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
+                {
+                    String dayString = dayOfMonth + "";
+                    String monthString = (month + 1) + "";
+
+                    if (monthString.length() == 1)
+                        monthString = "0" + (month + 1);
+                    if (dayString.length() == 1)
+                        dayString = "0" + dayOfMonth;
+
+                    String dateString = year + monthString + dayString;
+                    searchParameters.edit().putString("BEGIN_DATE", dateString).apply();
+
+                    dateString = dayString + "/" + monthString + "/" + year;
+                    mTextViewBeginDate.setText(dateString);
+                }
+            }, year, month, day);
+
+            datePickerDialog.show();
+        }
+        if (v == mTextViewEndDate)
+        {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener()
+            {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
+                {
+                    String dayString = dayOfMonth + "";
+                    String monthString = (month + 1) + "";
+
+                    if (monthString.length() == 1)
+                        monthString = "0" + (month + 1);
+                    if (dayString.length() == 1)
+                        dayString = "0" + dayOfMonth;
+
+                    String dateString = year + monthString + dayString;
+                    searchParameters.edit().putString("END_DATE", dateString).apply();
+
+                    dateString = dayString + "/" + monthString + "/" + year;
+                    mTextViewEndDate.setText(dateString);
+                }
+            }, year, month, day);
+
+            datePickerDialog.show();
+        }
     }
 
     //=====================
@@ -201,112 +304,20 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     //=====================
 
     /**
-     * Used to set the date fields by creating a Date Picker to allow user to select a date,also used to get user data
-     * on search button by calling {@link SearchAndNotificationFragment#getDataFromEntryFields()} method.
-     * Finally used to set the notifications to On or Off
-     *
-     * @param v
-     *      The view clicked by the user
-     */
-    @Override
-    public void onClick(View v)
-    {
-        //Setup the notifications to On or Off for notification screen
-        if (v == mSwitch)
-        {
-            if (mSwitch.isChecked())
-            {
-                boolean checkBoxesState = checkIfUserHaveSelectedAtLeastOneCheckBox();
-                //ensure that user have typed one keyword and checked one checkbox
-                if (editTextState && checkBoxesState)
-                {
-                    //get the user request keywords
-                    this.getDataFromEntryFields();
-                    this.storeDataInSharedPreferences();
-                    //start job
-                    this.jobId = ShowNotificationJob.schedulePeriodicJob();
-                    Log.e("-----JOB_STATUS-----", "onClick: job activated");
-                }
-                else
-                {
-                    mSwitch.setChecked(false);
-                    Toast.makeText(getContext(), "You must select one category and type one word", Toast.LENGTH_SHORT).show();
-                }
-            }
-            else
-            {
-                ShowNotificationJob.cancelJob(jobId);
-                Log.e("-----JOB_STATUS-----", "onClick: job disabled");
-            }
-        }
-
-        // get data from entry fields here if user click on button, if he clicked on button, other "if" will not be executed
-        if (v == mBtn)
-        {
-            //Used to detect if user has checked at least one checkbox before clicking on button
-            boolean checkBoxesState = checkIfUserHaveSelectedAtLeastOneCheckBox();
-            //ensure that user have typed one keyword and checked one checkbox
-            if (editTextState && checkBoxesState)
-                this.getDataFromEntryFields();
-            else
-                Toast.makeText(getContext(), "You must select one category and type one word", Toast.LENGTH_SHORT).show();
-        }
-
-        //Get a calendar instance
-        final Calendar myCalendar = Calendar.getInstance();
-
-        int year = myCalendar.get(Calendar.YEAR);
-        int month = myCalendar.get(Calendar.MONTH);
-        int day = myCalendar.get(Calendar.DAY_OF_MONTH);
-
-        if (v == mTextViewBeginDate)
-        {
-            DatePickerDialog datePickerDialog = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener()
-            {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
-                {
-                    String date = (dayOfMonth + "/" + (month + 1) + "/" + year);
-
-                    mTextViewBeginDate.setText(date);
-                }
-            }, year, month, day);
-
-            datePickerDialog.show();
-        }
-        if (v == mTextViewEndDate)
-        {
-            DatePickerDialog datePickerDialog = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener()
-            {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
-                {
-                    String date = (dayOfMonth + "/" + (month + 1) + "/" + year);
-
-                    mTextViewEndDate.setText(date);
-                }
-            }, year, month, day);
-
-            datePickerDialog.show();
-        }
-    }
-
-    /**
      * Store data with sharedPreferences, used to restore screen state, and execute in planified task http request
      */
     private void storeDataInSharedPreferences()
     {
+        searchParameters.edit().putInt("SIZE_OF_LIST_KEYWORDS", finalStringList.size()).apply();
+
         for (String finalString : finalStringList)
             searchParameters.edit().putString("PREF_KEY_SEARCH_KEYWORDS_" + finalStringList.indexOf(finalString), finalString).apply();
-
-        searchParameters.edit().putInt("SIZE_OF_LIST_KEYWORDS", finalStringList.size()).apply();
-        searchParameters.edit().putBoolean("SWITCH_STATE", mSwitch.isChecked()).apply();
     }
 
     /**
      * Check if user has checked at least one checkbox, and set the button color if true; he's not allowed to launch request without any checkbox selected
-     * @return
-     *      boolean, true if a checked checkbox is detected, else return false
+     *
+     * @return boolean, true if a checked checkbox is detected, else return false
      */
     private boolean checkIfUserHaveSelectedAtLeastOneCheckBox()
     {
@@ -316,6 +327,38 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
                 return true;
         }
         return false;
+    }
+
+    /**
+     * Get the data passed in bundle and set up fields on screen if data is stored in sharedPreferences
+     */
+    private void getDataFromBundle()
+    {
+        Bundle bundle = getArguments();
+        if (bundle != null)
+            this.screenId = bundle.getInt("ID_SEARCH_NOTIFICATION_FRAG");
+
+        //set the switch to activated if a job is already started
+        this.stateJob = searchParameters.getBoolean("STATE_JOB", false);
+        this.mSwitch.setChecked(stateJob);
+
+        //get the size of arrayList stored in sharedPreferences for for loop
+        int arrayListSize = searchParameters.getInt("SIZE_OF_LIST_KEYWORDS", 0);
+        //set the editText content with the first item of list
+
+        mEditTextKeyWords.setText(searchParameters.getString("PREF_KEY_SEARCH_KEYWORDS_0", ""));
+        //check if words stored match with checkboxes titles, if match set checkbox state to checked
+        for (int i = 0; i < arrayListSize; i++)
+        {
+            for (CheckBox checkBox : checkBoxes1ist)
+            {
+                String wordToCompare = searchParameters.getString("PREF_KEY_SEARCH_KEYWORDS_" + i, null);
+
+                if (wordToCompare != null && wordToCompare.equals(checkBox.getText().toString()))
+                    checkBox.setChecked(true);
+            }
+        }
+
     }
 
     //==========================================
@@ -340,42 +383,13 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     }
 
     /**
-     * Get the data passed in bundle and set up fields on screen if data is stored in sharedPreferences
-     */
-    private void getDataFromBundle()
-    {
-        Bundle bundle = getArguments();
-        if (bundle != null)
-            this.screenId = bundle.getInt("ID_SEARCH_NOTIFICATION_FRAG");
-
-        //set the switch to activated if a job is already started
-        this.mSwitch.setChecked(searchParameters.getBoolean("SWITCH_STATE", false));
-
-        //get the size of arrayList stored in sharedPreferences for for loop
-        int arrayListSize = searchParameters.getInt("SIZE_OF_LIST_KEYWORDS", 0);
-        //set the editText content with the first item of list
-        mEditTextKeyWords.setText(searchParameters.getString("PREF_KEY_SEARCH_KEYWORDS_0", ""));
-        //check if words stored match with checkboxes titles, if match set checkbox state to checked
-        for (int i = 0; i < arrayListSize; i++)
-        {
-            for (CheckBox checkBox : checkBoxes1ist)
-            {
-                String wordToCompare = searchParameters.getString("PREF_KEY_SEARCH_KEYWORDS_" + i, null);
-
-                if (wordToCompare.equals(checkBox.getText().toString()))
-                    checkBox.setChecked(true);
-            }
-        }
-    }
-
-    /**
      * This method remove the fields useless for each screen, and set a click listener on needed fields
      */
     private void removeUselessEntryFields()
     {
         switch (screenId)
         {
-            case 0 :
+            case 0:
                 //For search screen : Remove the switch field and the separator because they are useless
                 this.mViewSeparator.setVisibility(View.GONE);
                 this.mSwitch.setVisibility(View.GONE);
@@ -388,7 +402,7 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
                 this.mBtn.setOnClickListener(this);
                 break;
 
-            case 1 :
+            case 1:
                 //for notification screen : remove the date selection fields and the button because they are useless
                 this.mLinearLayout.setVisibility(View.GONE);
                 this.mBtn.setVisibility(View.GONE);
@@ -397,11 +411,39 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
                 this.mSwitch.setOnClickListener(this);
                 break;
 
-            default :
+            default:
                 break;
         }
         mTextViewBeginDate.setOnClickListener(this);
         mTextViewEndDate.setOnClickListener(this);
+    }
+
+    /**
+     * Get the user entry from all checkboxes and from editText field, and initialise dedicated variables with data collected, after that
+     * get specific screen data
+     */
+    private void getDataFromEntryFields()
+    {
+        //get the editText content as the first field of list (usefull to restore state of screen with sharedPreferences
+        finalStringList.add(mEditTextKeyWords.getText().toString());
+
+        //get the common fields data content
+        for (CheckBox checkBox : checkBoxes1ist)
+        {
+            if (String.valueOf(checkBox.isChecked()).equals("true"))
+                finalStringList.add(checkBox.getText().toString());
+        }
+
+        //get each specific fields
+        switch (screenId)
+        {
+            case 0:
+                mCallback.onButtonSearchClicked(finalStringList, searchParameters.getString("BEGIN_DATE", null), searchParameters.getString("END_DATE", null));
+                break;
+
+            default:
+                break;
+        }
     }
 
     /**
@@ -435,49 +477,18 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     //==========================================
 
     /**
-     * Get the user entry from all checkboxes and from editText field, and initialise dedicated variables with data collected, after that
-     * get specific screen data
+     * Create a callback to parent activity, display a log if error is thrown
      */
-    private void getDataFromEntryFields()
+    public void createCallbackToParentActivity()
     {
-        //get the editText content as the first field of list (usefull to restore state of screen with sharedPreferences
-        finalStringList.add(mEditTextKeyWords.getText().toString());
-
-        //get the common fields data content
-        for (CheckBox checkBox : checkBoxes1ist)
+        try
         {
-            if (String.valueOf(checkBox.isChecked()).equals("true"))
-                finalStringList.add(checkBox.getText().toString());
+            mCallback = (OnButtonSearchClickedCallback) getActivity();
         }
-
-        //get each specific fields
-        switch (screenId)
+        catch (ClassCastException e)
         {
-            case 0 :
-                //for search screen : get data and check if the value need to be null (case of an empty string) or not
-                String beginDate = checkIfNeedToBeNull(mTextViewBeginDate.getText().toString());
-                String endDate = checkIfNeedToBeNull(mTextViewEndDate.getText().toString());
-
-                mCallback.onButtonSearchClicked(finalStringList, beginDate, endDate);
-                break;
-
-            default:
-                break;
+            Log.e(" createCallback ", " Must Implement OnButtonClickedListener ", e);
         }
-    }
-
-    /**
-     * Check if the entry String is empty (case of a non-checked checkbox), and replace it by null value
-     * @param string
-     *      the String to be checked
-     * @return
-     *      if entry String equals to empty String return null, else return the String without any modifications
-     */
-    private String checkIfNeedToBeNull(String string)
-    {
-        if (string.equals(""))
-            return null;
-        else return string;
     }
 
     //==========================================
@@ -485,17 +496,20 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     //==========================================
 
     /**
-     * Create a callback to parent activity, display a log if error is thrown
+     * Used for callback to activities
      */
-    public void createCallbackToParentActivity()
+    public interface OnButtonSearchClickedCallback
     {
-        try
-        {
-           mCallback = (OnButtonSearchClickedCallback) getActivity();
-        }
-        catch (ClassCastException e)
-        {
-            Log.e(" createCallback ", " Must Implement OnButtonClickedListener ", e);
-        }
+        /**
+         * Used when user click on search button
+         *
+         * @param mQueryList
+         *         contain a list of query search keywords
+         * @param mBeginDate
+         *         contain the begin date for search request
+         * @param mEndDate
+         *         contain the end date for search request
+         */
+        void onButtonSearchClicked(ArrayList<String> mQueryList, String mBeginDate, String mEndDate);
     }
 }

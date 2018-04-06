@@ -25,7 +25,7 @@
         android:layout_margin="20dp"
         android:orientation="vertical">
 
-        <!-- Date caption -->
+        <!-- DateNYTConverter caption -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
 
         </LinearLayout>
 
-        <!-- Date entry fields -->
+        <!-- DateNYTConverter entry fields -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

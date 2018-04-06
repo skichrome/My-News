@@ -1,9 +1,9 @@
-package com.skichrome.mynews.utils;
+package com.skichrome.mynews.util;
 
 /**
  * This class is used to convert date format sent by NewYorkTimes API to a usable format
  */
-public class Date
+public class DateNYTConverter
 {
     // ====================
     // Fields

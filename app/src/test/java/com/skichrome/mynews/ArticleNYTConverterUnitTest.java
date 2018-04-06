@@ -5,8 +5,8 @@ import com.skichrome.mynews.model.articlesearchapi.Headline;
 import com.skichrome.mynews.model.articlesearchapi.MainNewYorkTimesArticleSearch;
 import com.skichrome.mynews.model.articlesearchapi.Multimedium;
 import com.skichrome.mynews.model.articlesearchapi.Response;
-import com.skichrome.mynews.utils.ArticleSampleForAPIConverter;
-import com.skichrome.mynews.utils.DataAPIConverter;
+import com.skichrome.mynews.util.ArticleNYTConverter;
+import com.skichrome.mynews.util.ArticleSampleForAPIConverter;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,10 +16,10 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class DataAPIConverterUnitTest
+public class ArticleNYTConverterUnitTest
 {
     private MainNewYorkTimesArticleSearch mMainNewYorkTimesArticleSearch = new MainNewYorkTimesArticleSearch();
-    private DataAPIConverter dataAPIConverter = new DataAPIConverter();
+    private ArticleNYTConverter articleNYTConverter = new ArticleNYTConverter();
     private List<ArticleSampleForAPIConverter> convertedArticles = new ArrayList<>();
 
     @Before
@@ -62,7 +62,7 @@ public class DataAPIConverterUnitTest
         mMainNewYorkTimesArticleSearch.setResponse(mResponse);
 
         //convert raw data and get only interesting fields
-        convertedArticles = dataAPIConverter.convertArticleSearchResult(mMainNewYorkTimesArticleSearch.getResponse().getDocs());
+        convertedArticles = articleNYTConverter.convertArticleSearchResult(mMainNewYorkTimesArticleSearch.getResponse().getDocs());
     }
 
     @Test

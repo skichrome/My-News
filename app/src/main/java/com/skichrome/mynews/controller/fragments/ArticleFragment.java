@@ -16,10 +16,10 @@ import com.skichrome.mynews.R;
 import com.skichrome.mynews.model.articlesearchapi.MainNewYorkTimesArticleSearch;
 import com.skichrome.mynews.model.mostpopularapimostviewed.MainNewYorkTimesMostPopular;
 import com.skichrome.mynews.model.topstoriesapi.MainNewYorkTimesTopStories;
-import com.skichrome.mynews.utils.ArticleSampleForAPIConverter;
-import com.skichrome.mynews.utils.DataAPIConverter;
-import com.skichrome.mynews.utils.ItemClickSupportOnRecyclerView;
-import com.skichrome.mynews.utils.NewYorkTimesStreams;
+import com.skichrome.mynews.util.ArticleNYTConverter;
+import com.skichrome.mynews.util.ArticleSampleForAPIConverter;
+import com.skichrome.mynews.util.ItemClickSupportOnRecyclerView;
+import com.skichrome.mynews.util.NewYorkTimesStreams;
 import com.skichrome.mynews.view.GenericRVAdapter;
 
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ public class ArticleFragment extends BaseFragment
     /**
      * Used to convert each api request in a formatted article list with only interesting fields, allow to use only one recyclerView adatper and view holder in the app
      */
-    private DataAPIConverter dataAPIConverter = new DataAPIConverter();
+    private ArticleNYTConverter articleNYTConverter = new ArticleNYTConverter();
     /**
      * Used for activity callback
      */
@@ -288,6 +288,8 @@ public class ArticleFragment extends BaseFragment
      */
     private void executeHttpRequest()
     {
+        swipeRefreshLayout.setRefreshing(true);
+
         switch (requestId)
         {
             case 10 :
@@ -314,7 +316,7 @@ public class ArticleFragment extends BaseFragment
     //==================================================
 
     /**
-     * Send a Top Stories request on API and update list by calling updateListResults method, with formatted articles in {@link DataAPIConverter}
+     * Send a Top Stories request on API and update list by calling updateListResults method, with formatted articles in {@link ArticleNYTConverter}
      */
     private void getTopStoriesResultsOnAPI ()
     {
@@ -337,7 +339,7 @@ public class ArticleFragment extends BaseFragment
             public void onNext (MainNewYorkTimesTopStories mMainNewYorkTimesTopStories)
             {
                 Log.e("-----TopStories-----", "onNext: Success ! Size of list : " + mMainNewYorkTimesTopStories.getResults().size());
-                updateListResults(dataAPIConverter.convertTopStoriesResult(mMainNewYorkTimesTopStories.getResults()));
+                updateListResults(articleNYTConverter.convertTopStoriesResult(mMainNewYorkTimesTopStories.getResults()));
             }
 
             /**
@@ -373,7 +375,7 @@ public class ArticleFragment extends BaseFragment
     //==================================================
 
     /**
-     * Send a Most Popular request on API and update list by calling updateListResults method, with formatted articles in {@link DataAPIConverter}
+     * Send a Most Popular request on API and update list by calling updateListResults method, with formatted articles in {@link ArticleNYTConverter}
      */
     private void getMostPopularResultsOnAPI()
     {
@@ -396,7 +398,7 @@ public class ArticleFragment extends BaseFragment
             public void onNext (MainNewYorkTimesMostPopular mainNewYorkTimesMostPopular)
             {
                 Log.e("-----MostPopular-----", "onNext: Success ! Size of list : " + mainNewYorkTimesMostPopular.getResults().size());
-                updateListResults(dataAPIConverter.convertMostPopularResult(mainNewYorkTimesMostPopular.getResults()));
+                updateListResults(articleNYTConverter.convertMostPopularResult(mainNewYorkTimesMostPopular.getResults()));
             }
 
             /**
@@ -432,7 +434,7 @@ public class ArticleFragment extends BaseFragment
     //==================================================
 
     /**
-     * Send a Article Search request on API and update list by calling updateListResults method, with formatted articles in {@link DataAPIConverter}
+     * Send a Article Search request on API and update list by calling updateListResults method, with formatted articles in {@link ArticleNYTConverter}
      */
     private void getArticleSearchResultsOnAPI()
     {
@@ -455,7 +457,7 @@ public class ArticleFragment extends BaseFragment
             public void onNext (MainNewYorkTimesArticleSearch mainNewYorkTimesArticleSearch)
             {
                 Log.e("-----ArticleSearch-----", "onNext: Success ! Size of list : " + mainNewYorkTimesArticleSearch.getResponse().getDocs().size());
-                updateListResults(dataAPIConverter.convertArticleSearchResult(mainNewYorkTimesArticleSearch.getResponse().getDocs()));
+                updateListResults(articleNYTConverter.convertArticleSearchResult(mainNewYorkTimesArticleSearch.getResponse().getDocs()));
             }
 
             /**

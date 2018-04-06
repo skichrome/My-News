@@ -1,4 +1,4 @@
-package com.skichrome.mynews.utils;
+package com.skichrome.mynews.util;
 
 import com.skichrome.mynews.model.articlesearchapi.Doc;
 import com.skichrome.mynews.model.topstoriesapi.Result;
@@ -11,7 +11,7 @@ import java.util.List;
  *
  * <p>This class allow to have only one recyclerView to display article in fragments.</p>
  */
-public class DataAPIConverter
+public class ArticleNYTConverter
 {
     //=========================================
     // Fields
@@ -33,7 +33,7 @@ public class DataAPIConverter
     /**
      * empty constructor
      */
-    public DataAPIConverter()
+    public ArticleNYTConverter()
     {
     }
 

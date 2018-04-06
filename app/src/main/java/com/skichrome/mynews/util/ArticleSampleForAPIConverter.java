@@ -1,4 +1,4 @@
-package com.skichrome.mynews.utils;
+package com.skichrome.mynews.util;
 
 import com.skichrome.mynews.model.articlesearchapi.Doc;
 import com.skichrome.mynews.model.topstoriesapi.Result;
@@ -13,7 +13,7 @@ import java.util.List;
  *     We need to create one instance of this class for each article sended by the api (grouped in a result or doc list in model).
  * </p>
  * <p>
- *     the date field is formatted using {@link Date} class, and there is a method who change section separators
+ *     the date field is formatted using {@link DateNYTConverter} class, and there is a method who change section separators
  *     @see ArticleSampleForAPIConverter#convertSectionId(String)
  * </p>
  */
@@ -47,18 +47,18 @@ public class ArticleSampleForAPIConverter
     /**
      * Used to format date to a usable form
      */
-    private Date dateConverter;
+    private DateNYTConverter dateNYTConverterConverter;
 
     //=========================================
     // Constructor
     //=========================================
 
     /**
-     * Instanciate a new Date object
+     * Instanciate a new DateNYTConverter object
      */
     ArticleSampleForAPIConverter()
     {
-        this.dateConverter = new Date();
+        this.dateNYTConverterConverter = new DateNYTConverter();
     }
 
     //=========================================
@@ -121,7 +121,7 @@ public class ArticleSampleForAPIConverter
      * @param mTopStoriesResult
      *      Contain an article of API response
      *
-     * @see DataAPIConverter#convertTopStoriesResult(List)
+     * @see ArticleNYTConverter#convertTopStoriesResult(List)
      */
     public void configureArticleForTopStories(Result mTopStoriesResult)
     {
@@ -131,8 +131,8 @@ public class ArticleSampleForAPIConverter
         this.title = mTopStoriesResult.getTitle();
 
         //convert date before set it to field
-        dateConverter.extractDataFromDateFormatted(dateConverter.deleteEndOfString(mTopStoriesResult.getPublishedDate()));
-        this.date = dateConverter.toString();
+        dateNYTConverterConverter.extractDataFromDateFormatted(dateNYTConverterConverter.deleteEndOfString(mTopStoriesResult.getPublishedDate()));
+        this.date = dateNYTConverterConverter.toString();
 
         this.articleUrl = mTopStoriesResult.getUrl();
 
@@ -148,7 +148,7 @@ public class ArticleSampleForAPIConverter
      * @param mMostPopularResult
      *      Contain an article of API response
      *
-     * @see DataAPIConverter#convertMostPopularResult(List)
+     * @see ArticleNYTConverter#convertMostPopularResult(List)
      */
     public void configureArticleForMostPopular(com.skichrome.mynews.model.mostpopularapimostviewed.Result mMostPopularResult)
     {
@@ -158,8 +158,8 @@ public class ArticleSampleForAPIConverter
         this.title = mMostPopularResult.getTitle();
 
         //convert date before set it to field
-        dateConverter.extractDataFromDateFormatted(dateConverter.deleteEndOfString(mMostPopularResult.getPublishedDate()));
-        this.date = dateConverter.toString();
+        dateNYTConverterConverter.extractDataFromDateFormatted(dateNYTConverterConverter.deleteEndOfString(mMostPopularResult.getPublishedDate()));
+        this.date = dateNYTConverterConverter.toString();
 
         this.articleUrl = mMostPopularResult.getUrl();
 
@@ -175,7 +175,7 @@ public class ArticleSampleForAPIConverter
      * @param mDoc
      *      Contain an article of API response
      *
-     * @see DataAPIConverter#convertArticleSearchResult(List)
+     * @see ArticleNYTConverter#convertArticleSearchResult(List)
      */
     public void configureArticleForArticleSearch(Doc mDoc)
     {
@@ -190,19 +190,22 @@ public class ArticleSampleForAPIConverter
         //convert date before set it to field
         if (mDoc.getPubDate() != null)
         {
-            dateConverter.extractDataFromDateFormatted(dateConverter.deleteEndOfString(mDoc.getPubDate()));
-            this.date = dateConverter.toString();
+            dateNYTConverterConverter.extractDataFromDateFormatted(dateNYTConverterConverter.deleteEndOfString(mDoc.getPubDate()));
+            this.date = dateNYTConverterConverter.toString();
         }
 
         this.articleUrl = mDoc.getWebUrl();
 
         //Check if the list isn't empty, if it's empty don't initialize the url here
+        //Add start of url here because the api response doesn't include all url
+        //
+        // Api responce  => images/2018/03/18/us/18dc-mueller/merlin_132922965_522d16ad-7508-4433-9f7f-1574a26aee65-superJumbo.jpg
+        // Url format example => https://static01.nyt.com/images/2018/03/18/us/18dc-mueller/merlin_132922965_522d16ad-7508-4433-9f7f-1574a26aee65-superJumbo.jpg?quality=75&auto=webp
         if (mDoc.getMultimedia().size() != 0)
-            this.imageUrl = mDoc.getMultimedia().get(0).getUrl();
+            this.imageUrl = "https://static01.nyt.com/" + mDoc.getMultimedia().get(0).getUrl();
         else
             this.imageUrl = null;
     }
-
     //=========================================
     // Private methods
     //=========================================

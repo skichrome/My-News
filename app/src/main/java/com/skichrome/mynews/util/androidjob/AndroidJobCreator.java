@@ -1,4 +1,4 @@
-package com.skichrome.mynews.utils.androidjob;
+package com.skichrome.mynews.util.androidjob;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.skichrome.mynews.controller.activities.MainActivity;
 import com.skichrome.mynews.model.topstoriesapi.MainNewYorkTimesTopStories;
-import com.skichrome.mynews.utils.NewYorkTimesStreams;
+import com.skichrome.mynews.util.NewYorkTimesStreams;
 
 import org.junit.Rule;
 import org.junit.Test;
