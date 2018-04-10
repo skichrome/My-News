@@ -11,6 +11,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        //generate reports
+        debug { testCoverageEnabled true }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -23,7 +25,6 @@ repositories
             maven { url "https://clojars.org/repo/" }
             mavenCentral()
             google()
-
         }
 
 dependencies {

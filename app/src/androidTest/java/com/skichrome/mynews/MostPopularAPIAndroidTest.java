@@ -4,7 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.skichrome.mynews.controller.activities.MainActivity;
-import com.skichrome.mynews.model.topstoriesapi.MainNewYorkTimesTopStories;
+import com.skichrome.mynews.model.mostpopularapimostviewed.MainNewYorkTimesMostPopular;
 import com.skichrome.mynews.util.NewYorkTimesStreams;
 
 import org.junit.Rule;
@@ -17,22 +17,22 @@ import io.reactivex.observers.TestObserver;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * This class test if the Top Stories API return a list of at least one article when sending a request.
+ * This class test if the Most Popular API return a list of at least one article when sending a request.
  */
 @RunWith(AndroidJUnit4.class)
-public class TopStoriesRecyclerViewTest
+public class MostPopularAPIAndroidTest
 {
     @Rule
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void doesTheTopStoriesAPIReturnSomeArticles()
+    public void doesTheMostPopularAPIReturnSomeArticles()
     {
         //get the stream
-        Observable<MainNewYorkTimesTopStories> observable = NewYorkTimesStreams.streamDownloadTopStoriesAPI("home");
+        Observable<MainNewYorkTimesMostPopular> observable = NewYorkTimesStreams.streamDownloadMostPopularAPI("all-sections");
 
         //create a new testObserver
-        TestObserver<MainNewYorkTimesTopStories> testObserver = new TestObserver<>();
+        TestObserver<MainNewYorkTimesMostPopular> testObserver = new TestObserver<>();
 
         //launch observable and check there is no errors
         observable.subscribeWith(testObserver)
@@ -41,9 +41,9 @@ public class TopStoriesRecyclerViewTest
                 .awaitTerminalEvent();
 
         //get the downloaded object
-        MainNewYorkTimesTopStories mainNewYorkTimesTopStories = testObserver.values().get(0);
+        MainNewYorkTimesMostPopular mainNewYorkTimesMostPopular = testObserver.values().get(0);
 
-        assertThat("The list of article downloaded must contain at least one element", mainNewYorkTimesTopStories.getResults().size() != 0);
+        assertThat("The list of article downloaded must contain at least one element", mainNewYorkTimesMostPopular.getResults().size() != 0);
 
     }
 }

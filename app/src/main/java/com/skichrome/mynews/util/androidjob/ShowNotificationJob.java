@@ -68,7 +68,7 @@ public class ShowNotificationJob extends Job
     public static int schedulePeriodicJob()
     {
         return new JobRequest.Builder(ShowNotificationJob.TAG)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(15), TimeUnit.MINUTES.toMillis(5))
+                .setPeriodic(TimeUnit.DAYS.toMillis(1), TimeUnit.HOURS.toMillis(2))
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                 .setUpdateCurrent(true)
                 .build()
@@ -184,8 +184,7 @@ public class ShowNotificationJob extends Job
      */
     private void updateListResults(List<ArticleSampleForAPIConverter> mResultsList)
     {
-        ArrayList<ArticleSampleForAPIConverter> resultList = new ArrayList<>();
-        resultList.addAll(mResultsList);
+        ArrayList<ArticleSampleForAPIConverter> resultList = new ArrayList<>(mResultsList);
 
         if (resultList.size() != 0)
             configureNotification();
@@ -231,10 +230,12 @@ public class ShowNotificationJob extends Job
 
             // Register the channel with the system
             NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(channel);
-
-            // notificationId is a unique int for each notification that you must define
-            notificationManager.notify(10, mBuilder.build());
+            if (notificationManager != null)
+            {
+                notificationManager.createNotificationChannel(channel);
+                // notificationId is a unique int for each notification that you must define
+                notificationManager.notify(10, mBuilder.build());
+            }
         }
         //default notification for older Android versions
         else
