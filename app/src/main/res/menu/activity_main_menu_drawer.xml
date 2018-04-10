@@ -30,6 +30,21 @@
                     android:icon="@drawable/chip"
                     android:title="@string/activity_main_menu_drawer_title_new_technology" />
 
+                <item
+                    android:id="@+id/activity_main_menu_drawer_sports"
+                    android:icon="@drawable/medal"
+                    android:title="@string/activity_main_menu_drawer_title_sports" />
+
+                <item
+                    android:id="@+id/activity_main_menu_drawer_science"
+                    android:icon="@drawable/flasks"
+                    android:title="@string/activity_main_menu_drawer_title_science" />
+
+                <item
+                    android:id="@+id/activity_main_menu_drawer_automobile"
+                    android:icon="@drawable/sports_car"
+                    android:title="@string/activity_main_menu_drawer_title_automobile" />
+
             </group>
         </menu>
     </item>

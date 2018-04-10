@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -158,6 +156,7 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
             if (mSwitch.isChecked())
             {
                 boolean checkBoxesState = checkIfUserHaveSelectedAtLeastOneCheckBox();
+                editTextState = checkIfUserTypedText();
                 //ensure that user have typed one keyword and checked one checkbox
                 if (editTextState && checkBoxesState)
                 {
@@ -199,8 +198,8 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
         {
             //Used to detect if user has checked at least one checkbox before clicking on button
             boolean checkBoxesState = checkIfUserHaveSelectedAtLeastOneCheckBox();
-
             //ensure that user have typed one keyword and checked one checkbox, else show a Toast alert
+            editTextState = checkIfUserTypedText();
             if (editTextState && checkBoxesState)
                 this.getDataFromEntryFields();
             else
@@ -286,7 +285,6 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
         this.getDataFromBundle();
         this.removeUselessEntryFields();
         this.createCallbackToParentActivity();
-        this.setTextEntryListenerForButtonActivation();
     }
 
     /**
@@ -344,6 +342,16 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
                 return true;
         }
         return false;
+    }
+
+    /**
+     * Check if there is something in the search editText
+     *
+     * @return boolean, true if there is something, else false
+     */
+    private boolean checkIfUserTypedText()
+    {
+        return mEditTextKeyWords.getText().toString().length() != 0;
     }
 
     /**
@@ -469,32 +477,6 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
             default:
                 break;
         }
-    }
-
-    /**
-     * Set a listener on editText field, ensure that user can't launch an api request without any keywords
-     */
-    private void setTextEntryListenerForButtonActivation()
-    {
-        mEditTextKeyWords.addTextChangedListener(new TextWatcher()
-        {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after)
-            {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count)
-            {
-                //set the boolean to true if something is present in the editText field, else set to false
-                editTextState = s.toString().length() != 0;
-            }
-
-            @Override
-            public void afterTextChanged(Editable s)
-            {
-            }
-        });
     }
 
     //==========================================

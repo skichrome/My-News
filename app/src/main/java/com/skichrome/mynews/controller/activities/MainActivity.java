@@ -182,6 +182,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 changeFragmentInViewPager(2);
                 break;
 
+            case R.id.activity_main_menu_drawer_sports:
+                changeFragmentInViewPager(3);
+                break;
+
+            case R.id.activity_main_menu_drawer_science:
+                changeFragmentInViewPager(4);
+                break;
+
+            case R.id.activity_main_menu_drawer_automobile:
+                changeFragmentInViewPager(5);
+                break;
+
             case R.id.activity_main_menu_drawer_notifications :
                 launchNotificationsAndSearchActivity(1);
                 break;
