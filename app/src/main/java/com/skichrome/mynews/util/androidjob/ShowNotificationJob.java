@@ -56,6 +56,8 @@ public class ShowNotificationJob extends Job
      */
     private ArticleNYTConverter articleNYTConverter = new ArticleNYTConverter();
 
+    private SharedPreferences searchParameters;
+
     /**
      * Create and launch a new job with specific id
      * <p>
@@ -68,7 +70,7 @@ public class ShowNotificationJob extends Job
     public static int schedulePeriodicJob()
     {
         return new JobRequest.Builder(ShowNotificationJob.TAG)
-                .setPeriodic(TimeUnit.DAYS.toMillis(1), TimeUnit.HOURS.toMillis(2))
+                .setPeriodic(TimeUnit.DAYS.toMillis(1), TimeUnit.HOURS.toMillis(4))
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                 .setUpdateCurrent(true)
                 .build()
@@ -111,7 +113,7 @@ public class ShowNotificationJob extends Job
     protected Result onRunJob(@NonNull Params params)
     {
         searchKeywordsList = new ArrayList<>();
-        SharedPreferences searchParameters = getContext().getSharedPreferences("searchParameters", Context.MODE_PRIVATE);
+        getSharedPreferences();
 
         int arrayListSize = searchParameters.getInt("SIZE_OF_LIST_KEYWORDS", 0);
 
@@ -121,6 +123,33 @@ public class ShowNotificationJob extends Job
         this.getArticleSearchResultsOnAPI();
 
         return Result.SUCCESS;
+    }
+
+    /**
+     * This method is intended to be overwritten. It is called once when the job is still running, but was
+     * canceled. This can happen when the system wants to stop the job or if you manually cancel the job
+     * yourself. It's a good indicator to stop your work and maybe retry your job later again. Alternatively,
+     * you can also call {@link #isCanceled()}.
+     *
+     * @see #isCanceled()
+     */
+    @Override
+    protected void onCancel()
+    {
+        getSharedPreferences();
+        //store the job status
+        searchParameters.edit().putBoolean("STATE_JOB", false).apply();
+
+        //cancel job by calling super()
+        super.onCancel();
+    }
+
+    /**
+     * Get shared preferences
+     */
+    private void getSharedPreferences()
+    {
+        searchParameters = getContext().getSharedPreferences("searchParameters", Context.MODE_PRIVATE);
     }
 
     /**
@@ -213,8 +242,8 @@ public class ShowNotificationJob extends Job
                 .setSmallIcon(R.mipmap.ic_app_icon)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
-                .setContentTitle("Real Time Alert")
-                .setContentText("New articles available !")
+                .setContentTitle(getContext().getString(R.string.notification_title))
+                .setContentText(getContext().getString(R.string.notification_message))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         //for recent Android versions... create a notification channel

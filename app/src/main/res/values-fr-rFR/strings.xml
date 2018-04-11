@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My News</string>
+    <string name="menu_item_notifications">Notifications</string>
+    <string name="menu_item_help">Aide</string>
+    <string name="menu_item_about">A propos</string>
+    <string name="menu_item_search">Recherche</string>
+    <string name="navigation_drawer_open">Ouvrir le menu</string>
+    <string name="navigation_drawer_close">Fermer le menu</string>
+    <string name="description_image_recycler_view">Image téléchargée depuis l\'API du NYT</string>
+    <string name="activity_main_menu_drawer_notifications">Notifications</string>
+    <string name="activity_main_menu_drawer_configuration">Configuration</string>
+    <string name="activity_main_menu_drawer_help">Aide</string>
+    <string name="activity_main_menu_drawer_about">A propos</string>
+    <string name="activity_main_menu_drawer_news_feed">Fil d\'actualité</string>
+    <string name="activity_main_menu_drawer_title_new_technology">Technologie</string>
+    <string name="activity_main_menu_drawer_title_most_popular">Les plus populaire</string>
+    <string name="activity_main_menu_drawer_title_top_stories">Les articles du moment</string>
+    <string name="activity_main_menu_drawer_title_science">Science</string>
+    <string name="activity_main_menu_drawer_title_sports">Sports</string>
+    <string name="activity_main_menu_drawer_title_automobile">Automobile</string>
+    <string name="activity_main_menu_drawer_title_search">Recherche</string>
+    <string name="new_york_times_logo_nav_drawer_header">Logo du NYT</string>
+    <string name="fragment_base_search_search_field">Recherche par mots-clés</string>
+    <string name="fragment_base_search_politics">Politique</string>
+    <string name="fragment_base_search_sports">Sports</string>
+    <string name="fragment_base_search_travel">Voyage</string>
+    <string name="fragment_base_search_entrepreneurs">Entrepreneurs</string>
+    <string name="fragment_base_search_business">Business</string>
+    <string name="fragment_base_search_arts">Arts</string>
+    <string name="fragment_base_search_end_date">Date de fin</string>
+    <string name="fragment_base_search_begin_date">Date de départ</string>
+    <string name="fragment_base_search_notifications_switch">Activer les notifications (une par jour)</string>
+    <string name="fragment_base_search_search_btn_text">Recherche</string>
+    <string name="channel_name">Notification de nouveaux articles disponibles</string>
+    <string name="channel_description">Vous notifie une fois par jour si des articles correspondant à vos critères sont disponibles</string>
+    <string name="notification_title">Alerte en temps réel</string>
+    <string name="notification_message">Nouveaux Articles Disponibles !</string>
+</resources>

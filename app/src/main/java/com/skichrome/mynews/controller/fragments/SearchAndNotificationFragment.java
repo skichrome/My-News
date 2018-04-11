@@ -136,7 +136,7 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     }
 
     //=====================
-    // newInstance Method
+    // OnClick Method
     //=====================
 
     /**
@@ -180,14 +180,11 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
             }
             else
             {
-                //cancel job
-                ShowNotificationJob.cancelJob(jobId);
-                //save the status of job
-                this.stateJob = false;
                 //delete all things saved in sharedPreferences, because if notifications are disabled we don't want to save fields
                 searchParameters.edit().clear().apply();
-                //re-insert the state of stateJob in case of re-lauching the app
-                searchParameters.edit().putBoolean("STATE_JOB", stateJob).apply();
+
+                //cancel job
+                ShowNotificationJob.cancelJob(jobId);
 
                 Log.e("-----JOB_STATUS-----", "onClick: job disabled");
             }
@@ -220,22 +217,7 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
                 {
-                    String dayString = dayOfMonth + "";
-                    String monthString = (month + 1) + "";
-
-                    //convert the date in usable String format
-                    if (monthString.length() == 1)
-                        monthString = "0" + (month + 1);
-                    if (dayString.length() == 1)
-                        dayString = "0" + dayOfMonth;
-
-                    //put date in sharedPreferences in readable format for ArticleSearch API
-                    String dateString = year + monthString + dayString;
-                    searchParameters.edit().putString("BEGIN_DATE", dateString).apply();
-
-                    //display the selected date in field on screen
-                    dateString = dayString + "/" + monthString + "/" + year;
-                    mTextViewBeginDate.setText(dateString);
+                    mTextViewBeginDate.setText(showAndStoreDate("BEGIN_DATE", dayOfMonth, month, year));
                 }
             }, year, month, day);
 
@@ -248,22 +230,7 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
                 {
-                    String dayString = dayOfMonth + "";
-                    String monthString = (month + 1) + "";
-
-                    //convert the date in usable String format
-                    if (monthString.length() == 1)
-                        monthString = "0" + (month + 1);
-                    if (dayString.length() == 1)
-                        dayString = "0" + dayOfMonth;
-
-                    //put date in sharedPreferences in readable format for ArticleSearch API
-                    String dateString = year + monthString + dayString;
-                    searchParameters.edit().putString("END_DATE", dateString).apply();
-
-                    //display the selected date in field on screen
-                    dateString = dayString + "/" + monthString + "/" + year;
-                    mTextViewEndDate.setText(dateString);
+                    mTextViewEndDate.setText(showAndStoreDate("END_DATE", dayOfMonth, month, year));
                 }
             }, year, month, day);
 
@@ -306,9 +273,9 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
         return R.layout.fragment_search_and_notification;
     }
 
-    //=====================
-    // onClick Methods
-    //=====================
+    //===========================
+    // onClick working Methods
+    //===========================
 
     /**
      * Store data with sharedPreferences, used to restore screen state, and execute in planified task http request
@@ -391,7 +358,40 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
                     checkBox.setChecked(true);
             }
         }
+    }
 
+    /**
+     * This method is called to format and store the date in parameters
+     *
+     * @param SHARED_PREF_ID
+     *         id used in sharedPreferences for saving date
+     * @param mDayOfMonth
+     *         {@link Integer}, the day
+     * @param mMonth
+     *         {@link Integer}, the month
+     * @param mYear
+     *         {@link Integer}, the yeat
+     *
+     * @return {@link String}, the final date formatted, ready to be displayed in textView
+     */
+    private String showAndStoreDate(final String SHARED_PREF_ID, int mDayOfMonth, int mMonth, int mYear)
+    {
+        String dayString = mDayOfMonth + "";
+        String monthString = (mMonth + 1) + "";
+
+        //convert the date in usable String format
+        if (monthString.length() == 1)
+            monthString = "0" + (mMonth + 1);
+        if (dayString.length() == 1)
+            dayString = "0" + mDayOfMonth;
+
+        //put date in sharedPreferences in readable format for ArticleSearch API
+        String dateString = mYear + monthString + dayString;
+        searchParameters.edit().putString(SHARED_PREF_ID, dateString).apply();
+
+        //display the selected date in field on screen
+        dateString = dayString + "/" + monthString + "/" + mYear;
+        return dateString;
     }
 
     //==========================================
@@ -480,7 +480,7 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     }
 
     //==========================================
-    // Get data Methods
+    // Callback method
     //==========================================
 
     /**
