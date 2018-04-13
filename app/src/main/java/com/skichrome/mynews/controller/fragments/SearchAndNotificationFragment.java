@@ -120,10 +120,6 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
      * Used to identify job task, and cancel id when needed
      */
     private int jobId;
-    /**
-     * Used to detect if user has typed at least one keyword before clicking on button
-     */
-    private boolean editTextState;
 
     /**
      * Used each time we have to create this fragment to display it
@@ -150,6 +146,11 @@ public class SearchAndNotificationFragment extends BaseFragment implements View.
     @Override
     public void onClick(View v)
     {
+        /*
+         * Used to detect if user has typed at least one keyword before clicking on button
+         */
+        boolean editTextState;
+
         //Setup the notifications to On or Off for notification screen
         if (v == mSwitch)
         {

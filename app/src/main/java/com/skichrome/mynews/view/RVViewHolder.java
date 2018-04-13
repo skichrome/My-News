@@ -15,7 +15,7 @@ import butterknife.ButterKnife;
 /**
  * A View Holder used for data update in cells of RecyclerView
  */
-public class GenericRVViewHolder extends RecyclerView.ViewHolder
+public class RVViewHolder extends RecyclerView.ViewHolder
 {
     //=====================
     // Fields
@@ -47,7 +47,7 @@ public class GenericRVViewHolder extends RecyclerView.ViewHolder
      * @param itemView
      *      the view model
      */
-    GenericRVViewHolder(View itemView)
+    RVViewHolder(View itemView)
     {
         super(itemView);
         ButterKnife.bind(this, itemView);

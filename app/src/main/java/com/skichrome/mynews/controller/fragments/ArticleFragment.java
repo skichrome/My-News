@@ -20,7 +20,7 @@ import com.skichrome.mynews.util.ArticleNYTConverter;
 import com.skichrome.mynews.util.ArticleSampleForAPIConverter;
 import com.skichrome.mynews.util.ItemClickSupportOnRecyclerView;
 import com.skichrome.mynews.util.NewYorkTimesStreams;
-import com.skichrome.mynews.view.GenericRVAdapter;
+import com.skichrome.mynews.view.RVAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +66,7 @@ public class ArticleFragment extends BaseFragment
     /**
      * Adapter field
      */
-    private GenericRVAdapter genericRVAdapter;
+    private RVAdapter RVAdapter;
     /**
      * Contains the list of article downloaded
      */
@@ -182,8 +182,8 @@ public class ArticleFragment extends BaseFragment
     {
         this.resultList = new ArrayList<>();
 
-        this.genericRVAdapter = new GenericRVAdapter(resultList, Glide.with(this));
-        this.recyclerView.setAdapter(genericRVAdapter);
+        this.RVAdapter = new RVAdapter(resultList, Glide.with(this));
+        this.recyclerView.setAdapter(RVAdapter);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //set a separation in each cells in recyclerView
@@ -202,7 +202,7 @@ public class ArticleFragment extends BaseFragment
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v)
                     {
-                        String articleUrl = genericRVAdapter.getArticle(position);
+                        String articleUrl = RVAdapter.getArticle(position);
                         mCallback.onRVItemClicked(articleUrl);
                     }
                 });
@@ -242,7 +242,7 @@ public class ArticleFragment extends BaseFragment
         this.resultList.clear();
 
         this.resultList.addAll(mResultsList);
-        this.genericRVAdapter.notifyDataSetChanged();
+        this.RVAdapter.notifyDataSetChanged();
     }
 
     /**

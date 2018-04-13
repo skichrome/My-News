@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * An adapter used to display cells in RecyclerView
  */
-public class GenericRVAdapter extends RecyclerView.Adapter<GenericRVViewHolder>
+public class RVAdapter extends RecyclerView.Adapter<RVViewHolder>
 {
     //=====================
     // Fields
@@ -41,7 +41,7 @@ public class GenericRVAdapter extends RecyclerView.Adapter<GenericRVViewHolder>
      * @param mGlide
      *      Used in the viewHolder to set image with a web url
      */
-    public GenericRVAdapter(List<ArticleSampleForAPIConverter> mResultList, RequestManager mGlide)
+    public RVAdapter(List<ArticleSampleForAPIConverter> mResultList, RequestManager mGlide)
     {
         this.articleList = mResultList;
         this.glide = mGlide;
@@ -66,12 +66,12 @@ public class GenericRVAdapter extends RecyclerView.Adapter<GenericRVViewHolder>
      */
     @NonNull
     @Override
-    public GenericRVViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    public RVViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.recycler_view_list_item, parent, false);
 
-        return new GenericRVViewHolder(view);
+        return new RVViewHolder(view);
     }
 
     /**
@@ -86,7 +86,7 @@ public class GenericRVAdapter extends RecyclerView.Adapter<GenericRVViewHolder>
      *         The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(@NonNull GenericRVViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull RVViewHolder holder, int position)
     {
         holder.updateRecyclerViewItemData(articleList.get(position), glide);
     }
