@@ -21,6 +21,7 @@ import com.skichrome.mynews.controller.activities.MainActivity;
 import com.skichrome.mynews.model.articlesearchapi.MainNewYorkTimesArticleSearch;
 import com.skichrome.mynews.util.ArticleNYTConverter;
 import com.skichrome.mynews.util.ArticleSampleForAPIConverter;
+import com.skichrome.mynews.util.Credentials;
 import com.skichrome.mynews.util.NewYorkTimesStreams;
 
 import java.util.ArrayList;
@@ -157,7 +158,7 @@ public class ShowNotificationJob extends Job
      */
     private void getArticleSearchResultsOnAPI()
     {
-        Disposable disposable = NewYorkTimesStreams.streamDownloadArticleSearchAPI(this.searchKeywordsList, null, null).subscribeWith(new DisposableObserver<MainNewYorkTimesArticleSearch>()
+        Disposable disposable = NewYorkTimesStreams.streamDownloadArticleSearchAPI(this.searchKeywordsList, null, null, Credentials.NYT_API_KEY.getKey()).subscribeWith(new DisposableObserver<MainNewYorkTimesArticleSearch>()
         {
             /**
              * Provides the Observer with a new item to observe.

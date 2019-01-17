@@ -18,6 +18,7 @@ import com.skichrome.mynews.model.mostpopularapimostviewed.MainNewYorkTimesMostP
 import com.skichrome.mynews.model.topstoriesapi.MainNewYorkTimesTopStories;
 import com.skichrome.mynews.util.ArticleNYTConverter;
 import com.skichrome.mynews.util.ArticleSampleForAPIConverter;
+import com.skichrome.mynews.util.Credentials;
 import com.skichrome.mynews.util.ItemClickSupportOnRecyclerView;
 import com.skichrome.mynews.util.NewYorkTimesStreams;
 import com.skichrome.mynews.view.RVAdapter;
@@ -321,8 +322,9 @@ public class ArticleFragment extends BaseFragment
     private void getTopStoriesResultsOnAPI ()
     {
         getSearchParameters();
+        String key = Credentials.NYT_API_KEY.getKey();
 
-        this.disposable = NewYorkTimesStreams.streamDownloadTopStoriesAPI(section).subscribeWith(new DisposableObserver<MainNewYorkTimesTopStories>()
+        this.disposable = NewYorkTimesStreams.streamDownloadTopStoriesAPI(section, key).subscribeWith(new DisposableObserver<MainNewYorkTimesTopStories>()
         {
             /**
              * Provides the Observer with a new item to observe.
@@ -381,7 +383,7 @@ public class ArticleFragment extends BaseFragment
     {
         getSearchParameters();
 
-        this.disposable = NewYorkTimesStreams.streamDownloadMostPopularAPI(section).subscribeWith(new DisposableObserver<MainNewYorkTimesMostPopular>()
+        this.disposable = NewYorkTimesStreams.streamDownloadMostPopularAPI(section, Credentials.NYT_API_KEY.getKey()).subscribeWith(new DisposableObserver<MainNewYorkTimesMostPopular>()
         {
             /**
              * Provides the Observer with a new item to observe.
@@ -440,7 +442,7 @@ public class ArticleFragment extends BaseFragment
     {
         getSearchParametersForArticleSearch();
 
-        this.disposable = NewYorkTimesStreams.streamDownloadArticleSearchAPI(this.queryList, this.beginDate, this.endDate).subscribeWith(new DisposableObserver<MainNewYorkTimesArticleSearch>()
+        this.disposable = NewYorkTimesStreams.streamDownloadArticleSearchAPI(this.queryList, this.beginDate, this.endDate, Credentials.NYT_API_KEY.getKey()).subscribeWith(new DisposableObserver<MainNewYorkTimesArticleSearch>()
         {
             /**
              * Provides the Observer with a new item to observe.

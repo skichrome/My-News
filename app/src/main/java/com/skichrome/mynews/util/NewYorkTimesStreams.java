@@ -24,10 +24,10 @@ public class NewYorkTimesStreams
      * @return
      *      new observable
      */
-    public static Observable<MainNewYorkTimesTopStories> streamDownloadTopStoriesAPI (String section)
+    public static Observable<MainNewYorkTimesTopStories> streamDownloadTopStoriesAPI (String section, String key)
     {
         NewYorkTimesService newYorkTimesService = NewYorkTimesService.retrofitTopStories.create(NewYorkTimesService.class);
-        return newYorkTimesService.getTopStories(section)
+        return newYorkTimesService.getTopStories(section, key)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(20, TimeUnit.SECONDS);
@@ -41,10 +41,10 @@ public class NewYorkTimesStreams
      * @return
      *      new observable
      */
-    public static Observable<MainNewYorkTimesMostPopular> streamDownloadMostPopularAPI (String section)
+    public static Observable<MainNewYorkTimesMostPopular> streamDownloadMostPopularAPI (String section, String key)
     {
         NewYorkTimesService newYorkTimesService = NewYorkTimesService.retrofitMostPopular.create(NewYorkTimesService.class);
-        return newYorkTimesService.getMostPopular(section)
+        return newYorkTimesService.getMostPopular(section, key)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(20, TimeUnit.SECONDS);
@@ -64,10 +64,11 @@ public class NewYorkTimesStreams
      */
     public static Observable<MainNewYorkTimesArticleSearch> streamDownloadArticleSearchAPI(List<String> searchQueryItem,
                                                                                            String beginDate,
-                                                                                           String endDate)
+                                                                                           String endDate,
+                                                                                           String key)
     {
         NewYorkTimesService newYorkTimesService = NewYorkTimesService.retrofitArticleSearch.create(NewYorkTimesService.class);
-        return newYorkTimesService.getCustomArticles(searchQueryItem, beginDate, endDate)
+        return newYorkTimesService.getCustomArticles(searchQueryItem, beginDate, endDate, key)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(20, TimeUnit.SECONDS);

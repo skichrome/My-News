@@ -27,8 +27,9 @@ public interface NewYorkTimesService
      * @return
      *      new instance of Retrofit
      */
-    @GET("{section}.json?api-key=e4a8b2318952484aa1aacefbd54277cd")
-    Observable<MainNewYorkTimesTopStories> getTopStories(@Path("section") String section);
+    @GET("{section}.json")
+    Observable<MainNewYorkTimesTopStories> getTopStories(@Path("section") String section,
+                                                         @Query("api-key") String key);
 
     Retrofit retrofitTopStories = new Retrofit.Builder()
             .baseUrl("http://api.nytimes.com/svc/topstories/v2/")
@@ -44,8 +45,9 @@ public interface NewYorkTimesService
      * @return
      *      new instance of Retrofit
      */
-    @GET("{section}/30.json?api-key=e4a8b2318952484aa1aacefbd54277cd")
-    Observable<MainNewYorkTimesMostPopular> getMostPopular(@Path("section") String section);
+    @GET("{section}/30.json")
+    Observable<MainNewYorkTimesMostPopular> getMostPopular(@Path("section") String section,
+                                                           @Query("api-key") String key);
 
     Retrofit retrofitMostPopular = new Retrofit.Builder()
             .baseUrl("http://api.nytimes.com/svc/mostpopular/v2/mostemailed/")
@@ -65,11 +67,12 @@ public interface NewYorkTimesService
      * @return
      *      new instance of Retrofit
      */
-    @GET("articlesearch.json?api-key=e4a8b2318952484aa1aacefbd54277cd")
+    @GET("articlesearch.json")
     Observable<MainNewYorkTimesArticleSearch> getCustomArticles(
             @Query("q") List<String> searchQueryItem,
             @Query("begin_date") String beginDate,
-            @Query("end_date") String endDate);
+            @Query("end_date") String endDate,
+            @Query("api-key") String key);
 
     Retrofit retrofitArticleSearch = new Retrofit.Builder()
             .baseUrl("http://api.nytimes.com/svc/search/v2/")
